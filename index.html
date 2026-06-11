@@ -54,16 +54,28 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 /* ── CONTENT ── */
 .content{padding:20px 24px;flex:1;max-width:1400px;margin:0 auto;width:100%}
 
-/* ── ALERT BANNER ── */
-.alert-banner{
-  background:linear-gradient(135deg,#fef2f2,#fff5f5);
-  border:1px solid #fecaca;border-left:4px solid var(--danger);
-  border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;
-  display:flex;align-items:center;gap:12px;
+/* ── HIGHLIGHT CARDS (Itens em Destaque) ── */
+.highlight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.highlight-card{
+  background:linear-gradient(135deg,#fff 0%,#fafbff 100%);
+  border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  border:1px solid var(--border);border-left:5px solid var(--blue);
+  position:relative;overflow:hidden;
 }
-.alert-banner .alert-icon{font-size:20px;flex-shrink:0}
-.alert-banner .alert-text{font-size:13px;color:#991b1b;font-weight:500}
-.alert-banner .alert-count{font-weight:800;font-size:16px}
+.highlight-card::before{
+  content:'';position:absolute;top:0;right:0;width:80px;height:80px;
+  background:radial-gradient(circle,rgba(29,78,216,0.06) 0%,transparent 70%);
+  border-radius:50%;transform:translate(20px,-20px);
+}
+.hl-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.hl-icon{font-size:24px}
+.hl-name{font-size:14px;font-weight:700;color:var(--text)}
+.hl-instr{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.hl-metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;z-index:1}
+.hl-metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:4px}
+.hl-metric-value{font-size:24px;font-weight:800;line-height:1;letter-spacing:-0.5px}
+.hl-metric-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.hl-divider{width:1px;background:var(--border);margin:0 auto}
 
 /* ── KPI GRID ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
@@ -256,6 +268,8 @@ tbody td{padding:10px 14px;vertical-align:middle}
   .filter-bar{gap:6px}
   .summary-card{padding:14px}
   .alert-banner{padding:12px 14px}
+  .highlight-grid{grid-template-columns:1fr;gap:10px}
+  .hl-metric-value{font-size:22px}
 }
 @media(max-width:400px){
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
@@ -293,8 +307,8 @@ tbody td{padding:10px 14px;vertical-align:middle}
 
   <!-- ── VISÃO GERAL ── -->
   <div id="visao-geral" class="tab-content active">
-    <div id="alert-banner"></div>
     <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="highlight-grid" id="highlight-grid"></div>
     <div class="two-col">
       <div class="card">
         <div class="card-header">
@@ -717,17 +731,45 @@ function renderHeader(){
   document.getElementById('btn-todos').textContent=`Todos (${estoque.length})`;
 }
 
-// ── ALERT BANNER ──
-function renderAlertBanner(){
-  const el=document.getElementById('alert-banner');
-  if(ruptura===0){el.innerHTML='';return;}
-  el.innerHTML=`<div class="alert-banner">
-    <span class="alert-icon">🚨</span>
-    <span class="alert-text">
-      <span class="alert-count">${ruptura}</span> iten(s) com estoque zerado hoje —
-      ${estoqueComp.filter(e=>e.dias<=0).map(e=>e.nome).join(', ')}
-    </span>
-  </div>`;
+// ── ITENS EM DESTAQUE ──
+function renderHighlights(){
+  // Café Superior (cod 29405) e Papel A4 (cod 2078)
+  const destaques=[
+    {cod:29405,icon:"☕",label:"Café Superior"},
+    {cod:2078, icon:"📄",label:"Papel A4"},
+  ];
+  document.getElementById('highlight-grid').innerHTML=destaques.map(d=>{
+    const item=estoqueComp.find(e=>e.cod===d.cod);
+    if(!item) return '';
+    const corDias=item.dias<=0?'var(--danger)'
+                :item.dias<=30?'var(--crit)'
+                :item.dias<=60?'var(--warn)':'var(--ok)';
+    const corBorda=item.dias<=30?'var(--danger)':item.dias<=60?'var(--warn)':'var(--blue)';
+    const status=statusBadge(item.dias);
+    return`
+    <div class="highlight-card" style="border-left-color:${corBorda}">
+      <div class="hl-header">
+        <div class="hl-icon">${d.icon}</div>
+        <div style="flex:1">
+          <div class="hl-name">${d.label}</div>
+          <div class="hl-instr">${item.instrumento} · Cód. ${item.cod}</div>
+        </div>
+        ${status}
+      </div>
+      <div class="hl-metrics">
+        <div>
+          <div class="hl-metric-label">Saldo em estoque</div>
+          <div class="hl-metric-value" style="color:var(--text)">${fN(item.saldo)}</div>
+          <div class="hl-metric-sub">consumo médio: ${fN(item.consumo)}/mês</div>
+        </div>
+        <div>
+          <div class="hl-metric-label">Dias até ruptura</div>
+          <div class="hl-metric-value" style="color:${corDias}">${item.dias<=0?'0':item.dias}</div>
+          <div class="hl-metric-sub">ruptura em ${fD(item.ruptura)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── KPI ──
@@ -959,7 +1001,7 @@ function renderTramitacao(){
 //  INIT
 // ════════════════════════════════════════════
 renderHeader();
-renderAlertBanner();
+renderHighlights();
 renderKPI();
 renderDonut();
 renderCriticos();
