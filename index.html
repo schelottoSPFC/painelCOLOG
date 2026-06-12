@@ -2,828 +2,1015 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolão Copa 2026 — Painel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Painel Gerencial de Materiais</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0B0E13; --panel:#141A23; --panel2:#1A212C; --chip:#222A36;
-    --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
-    --ink:#E9EEF6; --muted:#8B94A5; --faint:#596072;
-    --grass:#27B96E; --green:#43C463; --blue:#4F9DF7; --amber:#F2A60C; --red:#F0555B;
-    --disp:'Archivo',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
-  }
-  *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;
-    background-image:radial-gradient(circle at 50% -10%, rgba(39,185,110,.10), transparent 45%);min-height:100vh}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px}
-  a{color:inherit}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0f172a;--navy2:#1e293b;--blue:#1d4ed8;--accent:#e94560;
+  --bg:#f1f5f9;--white:#ffffff;--border:#e2e8f0;
+  --text:#0f172a;--muted:#64748b;--light:#f8fafc;
+  --ok:#16a34a;--ok-bg:#dcfce7;
+  --warn:#d97706;--warn-bg:#fef3c7;
+  --crit:#ea580c;--crit-bg:#ffedd5;
+  --danger:#dc2626;--danger-bg:#fee2e2;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
+  --radius:12px;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-  /* header */
-  header{padding:30px 0 22px;border-bottom:1px solid var(--line);margin-bottom:28px}
-  .top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .mark{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.14em;color:#06140C;
-    background:var(--grass);padding:6px 10px;border-radius:6px}
-  h1{font-family:var(--disp);font-weight:800;font-size:clamp(26px,4.5vw,40px);letter-spacing:-.01em;margin:14px 0 4px;line-height:1.02}
-  .sub{color:var(--muted);font-size:15px;margin:0;max-width:640px}
-  .statusrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:stretch}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line2);
-    border-radius:999px;padding:8px 14px;font-size:13px;color:var(--muted)}
-  .pill b{color:var(--ink);font-weight:600}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(242,166,12,.16)}
-  .cd{display:flex;gap:6px;align-items:baseline;font-family:var(--mono);color:var(--ink)}
-  .cd small{font-family:var(--body);color:var(--faint);font-size:11px;font-weight:500}
+/* ── LAYOUT ── */
+.app{display:flex;flex-direction:column;min-height:100vh}
 
-  /* section heads */
-  .sec{margin-top:42px}
-  .eyebrow{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.16em;color:var(--grass);text-transform:uppercase;margin:0 0 4px}
-  .sec h2{font-family:var(--disp);font-weight:700;font-size:23px;margin:0 0 4px;letter-spacing:-.01em}
-  .sec .lead{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:680px}
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  border-bottom:3px solid var(--accent);
+  padding:20px 24px 0;
+  position:sticky;top:0;z-index:100;
+}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.header-brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.brand-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.brand-tag{color:var(--accent);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.header h1{color:#fff;font-size:20px;font-weight:800;letter-spacing:-0.5px;line-height:1.2}
+.header-meta{color:#94a3b8;font-size:12px;margin-top:2px}
+.header-badge{background:rgba(233,69,96,0.15);border:1px solid rgba(233,69,96,0.3);color:#fca5a5;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:4px}
 
-  /* multiples */
-  .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-  .mcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column}
-  .mcard h3{font-family:var(--disp);font-weight:700;font-size:17px;margin:0}
-  .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:14px}
-  .mhead .legs{font-size:12px;color:var(--faint)}
-  .leg{display:flex;align-items:center;gap:9px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
-  .leg:first-of-type{border-top:0}
-  .leg .lname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .leg .ltype{color:var(--muted);font-size:11px}
-  .leg .lodd{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:12.5px}
-  .tdot{width:7px;height:7px;border-radius:50%;flex:none}
-  .t-classif{background:var(--green)} .t-top2{background:var(--blue)} .t-venc{background:var(--amber)}
-  .mfoot{margin-top:16px;padding-top:16px;border-top:1px solid var(--line2);display:flex;justify-content:space-between;align-items:flex-end}
-  .combo{font-family:var(--mono);font-weight:700;font-size:30px;line-height:1;color:var(--grass)}
-  .combo small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--faint);margin-bottom:5px;letter-spacing:.04em}
-  .prob{text-align:right}
-  .prob .pv{font-family:var(--mono);font-weight:700;font-size:18px}
-  .prob small{display:block;font-size:11px;color:var(--faint)}
-  .hl-btn{margin-top:16px;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);
-    font-family:var(--body);font-size:13px;font-weight:500;padding:9px 12px;border-radius:9px;cursor:pointer;transition:.15s}
-  .hl-btn:hover{border-color:var(--grass);color:var(--grass)}
-  .hl-btn.on{background:rgba(39,185,110,.14);border-color:var(--grass);color:var(--grass)}
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;margin-top:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  padding:10px 16px;border:none;cursor:pointer;font-size:13px;font-weight:600;
+  border-radius:8px 8px 0 0;background:transparent;color:#64748b;
+  font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0;
+}
+.tab.active{background:var(--bg);color:var(--navy)}
+.tab:hover:not(.active){color:#cbd5e1}
 
-  /* bet status toggles */
-  .leg{cursor:pointer;transition:background .2s}
-  .leg:hover{background:rgba(255,255,255,.04)}
-  .leg .lstatus{width:22px;text-align:center;font-size:14px;flex:none;line-height:1}
-  .leg.won{background:rgba(39,185,110,.12)}
-  .leg.won .lname,.leg.won .ltype,.leg.won .lodd{color:var(--grass)}
-  .leg.won .lstatus{color:var(--grass)}
-  .leg.lost{background:rgba(240,85,91,.08);opacity:.45}
-  .leg.lost .lname{text-decoration:line-through}
-  .leg.lost .lstatus{color:var(--red)}
-  .mcount{font-size:12px;color:var(--muted);margin-left:auto}
-  .mcount b{color:var(--grass);font-weight:600}
+/* ── CONTENT ── */
+.content{padding:20px 24px;flex:1;max-width:1400px;margin:0 auto;width:100%}
 
-  /* key matches */
-  .matchrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
-  .match{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .match .when{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;
-    background:var(--panel2);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
-  .match .grp{font-family:var(--disp);font-weight:700;color:var(--ink);letter-spacing:.04em}
-  .scoreline{display:flex;align-items:center;justify-content:center;gap:14px;padding:18px 16px 12px}
-  .team{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:0}
-  .code{font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:.02em}
-  .tn{font-size:11px;color:var(--muted);text-align:center}
-  .vs{font-family:var(--mono);font-weight:700;color:var(--faint);font-size:14px}
-  .whyrow{padding:0 16px 16px;display:flex;flex-wrap:wrap;gap:6px}
-  .btag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
-  .btag.classif{background:rgba(67,196,99,.14);color:#7fe39a} 
-  .btag.top2{background:rgba(79,157,247,.14);color:#9cc6fb}
-  .btag.venc{background:rgba(242,166,12,.15);color:#f4c059}
-  .why{padding:0 16px 16px;font-size:12.5px;color:var(--muted);margin-top:-6px}
-  .why.warn{color:#f4c059}
+/* ── HIGHLIGHT CARDS (Itens em Destaque) ── */
+.highlight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.highlight-card{
+  background:linear-gradient(135deg,#fff 0%,#fafbff 100%);
+  border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  border:1px solid var(--border);border-left:5px solid var(--blue);
+  position:relative;overflow:hidden;
+}
+.highlight-card::before{
+  content:'';position:absolute;top:0;right:0;width:80px;height:80px;
+  background:radial-gradient(circle,rgba(29,78,216,0.06) 0%,transparent 70%);
+  border-radius:50%;transform:translate(20px,-20px);
+}
+.hl-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.hl-icon{font-size:24px}
+.hl-name{font-size:14px;font-weight:700;color:var(--text)}
+.hl-instr{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.hl-metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;z-index:1}
+.hl-metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:4px}
+.hl-metric-value{font-size:24px;font-weight:800;line-height:1;letter-spacing:-0.5px}
+.hl-metric-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.hl-divider{width:1px;background:var(--border);margin:0 auto}
 
-  /* groups */
-  .ggrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-  .gcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 0 8px}
-  .gcard.dim{opacity:.5}
-  .gtop{display:flex;align-items:center;gap:10px;padding:13px 16px 11px}
-  .gletter{font-family:var(--disp);font-weight:800;font-size:15px;width:26px;height:26px;border-radius:7px;
-    background:var(--chip);display:grid;place-items:center;color:var(--ink)}
-  .gtop .gl{font-size:12px;color:var(--faint);font-family:var(--disp);font-weight:600;letter-spacing:.1em}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th{font-size:10.5px;color:var(--faint);font-weight:500;text-transform:uppercase;letter-spacing:.06em;
-    text-align:center;padding:4px 0;border-bottom:1px solid var(--line)}
-  th.tl{text-align:left;padding-left:16px}
-  td{padding:9px 0;text-align:center;border-bottom:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-weight:500}
-  tr:last-child td{border-bottom:0}
-  td.team-cell{text-align:left;padding-left:16px;font-family:var(--body);color:var(--ink);font-weight:400}
-  td.team-cell .tcode{font-family:var(--mono);font-weight:700;font-size:11px;color:var(--faint);margin-right:8px}
-  .marked td{color:var(--ink)}
-  .marked .team-cell{position:relative;font-weight:500}
-  .marked .team-cell::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--grass)}
-  .mtags{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
-  .mtag{font-size:9.5px;font-weight:700;font-family:var(--mono);padding:1px 5px;border-radius:4px}
-  .mtag.classif{background:rgba(67,196,99,.16);color:#7fe39a}
-  .mtag.top2{background:rgba(79,157,247,.16);color:#9cc6fb}
-  .mtag.venc{background:rgba(242,166,12,.18);color:#f4c059}
-  .row-dim{opacity:.4}
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{
+  border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;
+}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.kpi-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.08;transform:translate(20px,-20px)}
+.kpi-card.kpi-danger::after{background:var(--danger)}
+.kpi-card.kpi-crit::after{background:var(--crit)}
+.kpi-card.kpi-warn::after{background:var(--warn)}
+.kpi-card.kpi-ok::after{background:var(--ok)}
+.kpi-icon{font-size:20px;margin-bottom:8px}
+.kpi-value{font-size:36px;font-weight:800;line-height:1;letter-spacing:-1px}
+.kpi-label{font-size:12px;font-weight:700;color:#374151;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi-trend{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px}
 
-  /* legend / filter bar */
-  .filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
-  .fbtn{background:var(--panel);border:1px solid var(--line2);color:var(--muted);font-family:var(--body);
-    font-size:13px;font-weight:500;padding:8px 16px;border-radius:9px;cursor:pointer;transition:.15s}
-  .fbtn:hover{color:var(--ink)}
-  .fbtn.active{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-left:auto}
-  .legend span{display:inline-flex;align-items:center;gap:6px}
+/* ── GRID LAYOUTS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
 
-  /* callouts */
-  .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);
-    border-radius:0 12px 12px 0;padding:14px 18px;font-size:13.5px;color:var(--muted);margin-top:14px}
-  .note.info{border-left-color:var(--blue)}
-  .note b{color:var(--ink);font-weight:600}
-  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--faint)}
-  footer p{margin:4px 0}
-  .fi{border-radius:2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);flex:none}
-  .fl{margin-right:8px;vertical-align:-2px}
-  .flag-lg{font-size:20px;margin-bottom:2px}
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.card-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
 
-  /* tabs */
-  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:-10px 0 22px}
-  .tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);
-    font-family:var(--disp);font-weight:600;font-size:14px;padding:12px 18px;cursor:pointer;transition:.15s;margin-bottom:-1px}
-  .tab:hover{color:var(--ink)}
-  .tab.active{color:var(--ink);border-bottom-color:var(--grass)}
-  .tabpane[hidden]{display:none}
+/* ── CRITICAL LIST ── */
+.crit-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.crit-item:last-child{border-bottom:none}
+.crit-name{font-weight:600;font-size:13px}
+.crit-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.crit-days{font-size:20px;font-weight:800;text-align:right;line-height:1}
+.crit-days-label{font-size:10px;color:var(--muted);text-align:right}
 
-  /* schedule */
-  .sched-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-  .fgroup{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-  .flabel{font-size:10.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
-  .fbtn.sm{padding:6px 11px;font-size:12.5px}
-  .toggle{margin-left:auto}
-  .daygroup{margin-bottom:18px}
-  .dayhead{display:flex;align-items:baseline;gap:10px;margin:0 0 8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-  .dayhead .dn{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink)}
-  .dayhead .dw{font-size:12px;color:var(--faint);text-transform:capitalize}
-  .dayhead .dr{font-size:11px;color:var(--faint);margin-left:auto}
-  .fix{display:grid;grid-template-columns:50px 28px 1fr auto;gap:12px;align-items:center;padding:9px 12px;border-radius:9px;font-size:13.5px}
-  .fix+.fix{margin-top:3px}
-  .fix:nth-child(even){background:rgba(255,255,255,.02)}
-  .fix.mine{background:rgba(39,185,110,.09);box-shadow:inset 3px 0 0 var(--grass)}
-  .fix .ftime{font-family:var(--mono);font-weight:700;color:var(--ink);font-size:13px}
-  .fix .fg{font-family:var(--disp);font-weight:700;font-size:11px;color:var(--muted);background:var(--chip);border-radius:5px;text-align:center;padding:3px 0}
-  .fix .fmatch{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
-  .fix .fmatch .nm{white-space:nowrap;color:var(--ink)}
-  .fix .fmatch .sep{color:var(--faint);font-family:var(--mono);font-size:12px}
-  .fix .fmatch .fsep{color:var(--faint);font-family:var(--mono);font-size:13px;min-width:40px;text-align:center;transition:color .3s;font-weight:500}
-  .fix.live{box-shadow:inset 3px 0 0 var(--grass);background:rgba(39,185,110,.07)}
-  .fix.live .fsep{color:var(--grass);font-weight:700}
-  .fix.ft .fsep{color:var(--ink);font-weight:700}
-  .livebadge{font-size:10px;font-weight:700;color:var(--grass);background:rgba(39,185,110,.15);padding:2px 7px;border-radius:4px;margin-left:6px;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* ── MINI STATS ── */
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.mini-stat{background:var(--light);border-radius:10px;padding:12px 14px;border:1px solid var(--border)}
+.mini-stat-val{font-size:26px;font-weight:800;line-height:1}
+.mini-stat-label{font-size:11px;color:var(--muted);margin-top:2px}
 
-  /* live status bar */
-  .live-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:13px}
-  .live-status{flex:1;min-width:0;color:var(--muted)}
-  .live-status.ls-ok{color:var(--grass)}
-  .live-status.ls-err{color:var(--red)}
-  .live-status.ls-warn{color:var(--amber)}
-  .live-status.ls-loading{color:var(--muted)}
-  #refresh-btn{background:var(--panel2);border:1px solid var(--line2);color:var(--muted);
-    width:36px;height:36px;border-radius:8px;cursor:pointer;display:grid;place-items:center;
-    transition:.2s;flex:none}
-  #refresh-btn:hover{color:var(--grass);border-color:var(--grass)}
-  #refresh-btn.spinning svg{animation:spin .7s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+/* ── PROCESS LIST ── */
+.proc-item{padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.proc-item:last-child{border-bottom:none}
+.proc-num{font-weight:700;color:var(--blue);font-family:'JetBrains Mono',monospace}
+.proc-meta{color:var(--muted);margin-top:1px}
 
-  /* debug box */
-  #debug-box{display:none;margin-top:10px;background:var(--panel2);border:1px solid var(--line2);
-    border-radius:10px;padding:14px;font-size:12px;color:var(--muted);overflow-x:auto}
-  #debug-box.open{display:block}
-  #debug-box table td,#debug-box table th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:left}
-  #debug-box table th{color:var(--faint);font-weight:500}
-  .fix .fcity{font-size:11px;color:var(--faint);text-align:right;white-space:nowrap}
-  .fix-bets{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:5px;padding:2px 0 4px}
-  .fbet{font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:5px;display:inline-flex;align-items:center;gap:4px;line-height:1.4}
-  .fbet .fm{font-weight:700;font-size:9.5px;opacity:.7}
-  .fbet.classif{background:rgba(67,196,99,.12);color:#7fe39a}
-  .fbet.top2{background:rgba(79,157,247,.12);color:#9cc6fb}
-  .fbet.venc{background:rgba(242,166,12,.13);color:#f4c059}
-  .schedsum{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 16px}
+/* ── CONTRACTS TABLE (Visão Geral) ── */
+.contracts-grid{display:grid;gap:8px}
+.contract-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:var(--light);border-radius:8px;border:1px solid var(--border);
+  font-size:12px;gap:8px;
+}
+.contract-name{font-weight:600;flex:1;min-width:0}
+.contract-meta{color:var(--muted);font-size:11px;white-space:nowrap}
+.progress-wrap{display:flex;align-items:center;gap:8px;min-width:120px}
+.progress-track{background:#e2e8f0;border-radius:4px;height:6px;flex:1;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.progress-pct{font-size:11px;font-weight:700;min-width:30px;text-align:right}
 
-  /* ---- MOBILE ---- */
-  @media (max-width:768px){
-    .wrap{padding:0 14px 48px}
-    h1{font-size:26px}
-    .mgrid{grid-template-columns:1fr}
-    .matchrow{grid-template-columns:1fr}
-    .ggrid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-    .metrics{grid-template-columns:repeat(2,1fr)}
-  }
-  @media (max-width:600px){
-    .wrap{padding:0 10px 40px}
-    h1{font-size:22px}
-    .top{gap:8px}
-    .mark{font-size:11px;padding:5px 8px}
-    .pill{font-size:12px;padding:6px 10px}
-    .tabs{gap:0;margin:-6px 0 16px}
-    .tab{font-size:13px;padding:10px 14px;flex:1;text-align:center}
-    .sec h2{font-size:19px}
-    .sec .lead{font-size:13px}
-    .sched-filters{gap:6px}
-    .fbtn.sm{padding:5px 9px;font-size:11.5px}
-    .toggle{margin-left:0}
-    .dayhead .dn{font-size:14px}
-    .fix{grid-template-columns:42px 24px 1fr;row-gap:4px;padding:8px 10px;font-size:12.5px;gap:8px}
-    .fix .ftime{font-size:12px}
-    .fix .fg{font-size:10px;padding:2px 0}
-    .fix .fcity{grid-column:3;text-align:left;font-size:10px}
-    .fix-bets{grid-column:1/-1}
-    .fbet{font-size:9.5px;padding:2px 6px}
-    .scoreline{gap:8px}
-    .code{font-size:19px}
-    .ggrid{grid-template-columns:1fr}
-    .gcard table{font-size:12px}
-    .mfoot{flex-direction:column;align-items:flex-start;gap:8px}
-    .combo{font-size:24px}
-    .filterbar{gap:6px}
-    .filterbar .fbtn{padding:6px 10px;font-size:12px}
-    .legend{font-size:11px;gap:10px}
-    .note{font-size:12.5px;padding:12px 14px}
-    .match .scoreline{padding:14px 12px 10px}
-    .match .whyrow{padding:0 12px 12px}
-    .match .why{padding:0 12px 12px;font-size:12px}
-    .btag{font-size:10px}
-    .leg{gap:6px;padding:5px 0;font-size:12.5px}
-    .leg .lodd{font-size:11.5px}
-    .leg .ltype{font-size:10px}
-    .callout{font-size:12px;padding:8px 10px}
-  }
-  @media (max-width:380px){
-    .wrap{padding:0 8px 36px}
-    h1{font-size:19px}
-    .pill{font-size:11px;padding:5px 8px}
-    .tab{font-size:12px;padding:8px 10px}
-    .fix{grid-template-columns:38px 22px 1fr;gap:6px;padding:7px 8px;font-size:12px}
-    .fix .ftime{font-size:11px}
-    .metrics{grid-template-columns:1fr 1fr;gap:8px}
-    .metric{padding:10px}
-    .metric .mv{font-size:20px}
-  }
+/* ── BAR CHART ── */
+.bar-row{margin-bottom:12px}
+.bar-header{display:flex;justify-content:space-between;margin-bottom:5px;align-items:center}
+.bar-label{font-size:12px;font-weight:500;color:var(--text)}
+.bar-value{font-size:12px;font-weight:700}
+.bar-track{background:var(--border);border-radius:6px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;transition:width .9s cubic-bezier(.4,0,.2,1)}
+
+/* ── INFO BOX ── */
+.info-box{margin-top:14px;padding:12px 16px;background:#f0fdf4;border-radius:10px;font-size:12px;color:#166534;border:1px solid #bbf7d0}
+
+/* ── BADGE ── */
+.badge{border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;display:inline-block;white-space:nowrap}
+.badge-danger{background:var(--danger-bg);color:var(--danger)}
+.badge-crit{background:var(--crit-bg);color:var(--crit)}
+.badge-warn{background:var(--warn-bg);color:var(--warn)}
+.badge-ok{background:var(--ok-bg);color:var(--ok)}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-purple{background:#f3e8ff;color:#6b21a8}
+.badge-gray{background:#f1f5f9;color:#475569}
+.badge-ativo{background:#dcfce7;color:#166534}
+.badge-vencido{background:#fee2e2;color:#dc2626}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+thead tr{background:var(--navy);color:#fff}
+thead th{padding:11px 14px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr:nth-child(odd){background:var(--white)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:hover{background:#eff6ff}
+tbody td{padding:10px 14px;vertical-align:middle}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-input{
+  padding:9px 14px;border-radius:10px;border:1px solid var(--border);
+  font-size:13px;font-family:'Inter',sans-serif;outline:none;width:200px;
+  transition:border .2s,box-shadow .2s;background:var(--white);
+}
+.filter-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,0.1)}
+.filter-btn{
+  padding:8px 14px;border-radius:10px;border:1px solid var(--border);
+  cursor:pointer;font-size:12px;font-weight:600;background:var(--white);
+  color:#374151;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;
+}
+.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.filter-btn:hover:not(.active){border-color:var(--navy);color:var(--navy)}
+
+/* ── SUMMARY CARDS ── */
+.summary-card{background:var(--white);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.s-icon{font-size:20px;margin-bottom:8px}
+.s-tag{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.s-val{font-size:14px;font-weight:700;color:var(--navy)}
+
+/* ── TAB CONTENT ── */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ── VENCIDO ── */
+.vencido-tag{font-size:9px;color:var(--danger);font-weight:700;background:var(--danger-bg);padding:1px 5px;border-radius:4px;margin-left:4px}
+
+/* ── MOBILE BOTTOM NAV ── */
+.bottom-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-top:1px solid var(--border);
+  padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+}
+.bottom-nav-items{display:flex;justify-content:space-around;align-items:center}
+.bnav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:4px 12px;cursor:pointer;border:none;background:none;
+  font-family:'Inter',sans-serif;color:var(--muted);transition:color .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.bnav-item.active{color:var(--blue)}
+.bnav-item .bnav-icon{font-size:20px;line-height:1}
+.bnav-item .bnav-label{font-size:10px;font-weight:600;letter-spacing:0.3px}
+.bnav-badge{
+  position:absolute;top:-2px;right:-6px;
+  background:var(--danger);color:#fff;
+  font-size:9px;font-weight:800;padding:1px 4px;border-radius:8px;
+  min-width:16px;text-align:center;line-height:14px;display:none;
+}
+.bnav-icon-wrap{position:relative;display:inline-block}
+
+/* ── DONUT CHART ── */
+.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut-svg{flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1;min-width:120px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-label{flex:1;font-weight:500}
+.legend-val{font-weight:800}
+
+/* ── SPARKLINE ── */
+.spark-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.spark-row:last-child{border-bottom:none}
+.spark-name{flex:1;font-size:12px;font-weight:600;min-width:0}
+.spark-bar-wrap{width:100px;flex-shrink:0}
+.spark-val{font-size:12px;font-weight:700;min-width:50px;text-align:right}
+
+/* ── SCROLL PADDING (mobile nav) ── */
+@media(max-width:768px){
+  body{padding-bottom:70px}
+  .bottom-nav{display:block}
+  .header{padding:16px 16px 0}
+  .header h1{font-size:17px}
+  .header-meta{display:none}
+  .tabs{display:none}
+  .content{padding:16px 14px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi-value{font-size:28px}
+  .kpi-card{padding:14px 16px}
+  .two-col{grid-template-columns:1fr;gap:12px}
+  .three-col{grid-template-columns:1fr}
+  .card{padding:16px}
+  .mini-stats{grid-template-columns:repeat(2,1fr)}
+  table{font-size:12px}
+  thead th{padding:9px 10px;font-size:10px}
+  tbody td{padding:8px 10px}
+  .filter-input{width:100%;flex:1}
+  .filter-bar{gap:6px}
+  .summary-card{padding:14px}
+  .alert-banner{padding:12px 14px}
+  .highlight-grid{grid-template-columns:1fr;gap:10px}
+  .hl-metric-value{font-size:22px}
+}
+@media(max-width:400px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi-value{font-size:24px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <header>
-    <div class="top">
-      <span class="mark">COPA 2026</span>
-      <span class="pill"><span class="dot"></span><b id="status-pill">Aguardando atualização</b></span>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-brand">
+        <div class="brand-dot"></div>
+        <span class="brand-tag">Controle Gerencial</span>
+      </div>
+      <h1>Gestão de Materiais</h1>
+      <div class="header-meta" id="header-meta">Carregando...</div>
     </div>
-    <h1>Painel - Copa 2026</h1>
-    <div class="live-bar">
-      <span class="live-status" id="live-status">⏳ Conectando...</span>
-      <button id="refresh-btn" title="Buscar placares agora" aria-label="Buscar placares">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="tab-jogos">Jogos · 1ª fase</button>
-    <button class="tab" data-tab="tab-painel">Painel</button>
+    <div class="header-badge" id="header-badge">...</div>
   </div>
-
-  <div id="tab-painel" class="tabpane" hidden>
-
-  <!-- MULTIPLAS -->
-  <section class="sec" id="sec-mult">
-    <p class="eyebrow">Suas apostas</p>
-    <h2>As três múltiplas</h2>
-    <p class="lead">Odd combinada = produto de todas as seleções. A probabilidade implícita vem da odd e não desconta a margem da casa nem considera correlação entre jogos.</p>
-    <div class="mgrid" id="mult-grid"></div>
-  </section>
-
-  <!-- PARTIDAS-CHAVE -->
-  <section class="sec">
-    <p class="eyebrow">Agenda quente</p>
-    <h2>Partidas para acompanhar</h2>
-    <p class="lead">Jogos que decidem mais de uma aposta sua de uma vez, ou que resolvem conflitos entre seus palpites.</p>
-    <div class="matchrow" id="match-row"></div>
-  </section>
-  </div><!-- /tab-painel -->
-
-  <div id="tab-jogos" class="tabpane">
-    <section class="sec" style="margin-top:24px">
-      <p class="eyebrow">Calendário</p>
-      <h2>Todos os jogos da 1ª fase</h2>
-      <p class="lead">A grade oficial divulgada pela FIFA — 72 partidas, de 11 a 27 de junho. Jogos com algum dos seus palpites aparecem destacados em verde.</p>
-      <p class="schedsum">72 jogos · horários de Brasília · sede entre parênteses</p>
-      <div class="sched-filters">
-        <div class="fgroup"><span class="flabel">Rodada</span>
-          <button class="fbtn sm active" data-sr="all">Todas</button>
-          <button class="fbtn sm" data-sr="1">1ª</button>
-          <button class="fbtn sm" data-sr="2">2ª</button>
-          <button class="fbtn sm" data-sr="3">3ª</button>
-        </div>
-        <button class="fbtn sm toggle" id="today-toggle">Hoje</button>
-        <button class="fbtn sm toggle" id="mine-toggle">Só meus palpites</button>
-      </div>
-      <div id="sched-list"></div>
-    </section>
-
-    <!-- GRUPOS (classificação abaixo dos jogos) -->
-    <section class="sec">
-      <p class="eyebrow">Fase de grupos</p>
-      <h2>Classificação</h2>
-      <p class="lead">Classificam-se os 2 primeiros de cada grupo + os 8 melhores 3ºs colocados. Times com aposta sua aparecem destacados com a tag da múltipla.</p>
-      <div class="filterbar">
-        <button class="fbtn active" data-f="all">Todas</button>
-        <button class="fbtn" data-f="M1">Múltipla 1</button>
-        <button class="fbtn" data-f="M2">Múltipla 2</button>
-        <button class="fbtn" data-f="M3">Múltipla 3</button>
-        <span class="legend">
-          <span><i class="tdot t-classif" style="width:8px;height:8px;border-radius:50%"></i>Classificar</span>
-          <span><i class="tdot t-top2" style="width:8px;height:8px;border-radius:50%"></i>Top 2</span>
-          <span><i class="tdot t-venc" style="width:8px;height:8px;border-radius:50%"></i>Vencedor</span>
-        </span>
-      </div>
-      <div class="ggrid" id="group-grid"></div>
-      <div class="note info">
-        <b>Grupo B — conflito resolvido.</b> Com a Suíça agora como top 2 (1.20, M2), seus palpites do grupo passam a ser compatíveis: Canadá em 1º (vencedor, M3) e Suíça em 2º (top 2, M2) podem acontecer juntos.
-      </div>
-      <div class="note info">
-        <b>Grupo L.</b> Inglaterra vencedor + Croácia top 2/classificar são compatíveis, e elas se enfrentam logo na estreia (17 jun): um único jogo mexe em três apostas suas.
-      </div>
-    </section>
-  </div><!-- /tab-jogos -->
-
-  <footer>
-    <p>Painel informativo gerado em 8 jun 2026 · classificação e resultados zerados porque o torneio ainda não começou. Atualize os placares conforme os jogos acontecerem.</p>
-    <p>Horários de Brasília. Aposte com responsabilidade.</p>
-  </footer>
-
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('visao-geral',this)">📊 Visão Geral</button>
+    <button class="tab" onclick="showTab('estoque',this)">📦 Estoque</button>
+    <button class="tab" onclick="showTab('contratos',this)">📄 Contratos</button>
+    <button class="tab" onclick="showTab('requisicoes',this)">📋 Requisições</button>
+    <button class="tab" onclick="showTab('tramitacao',this)">⏱ Tramitação</button>
+  </div>
 </div>
 
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ── VISÃO GERAL ── -->
+  <div id="visao-geral" class="tab-content active">
+    <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="highlight-grid" id="highlight-grid"></div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🚨 Ruptura Iminente</span>
+          <span class="card-badge badge badge-danger" id="criticos-count">...</span>
+        </div>
+        <div id="criticos-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📊 Status do Estoque</span>
+        </div>
+        <div class="donut-wrap" id="donut-wrap"></div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 Requisições</span>
+        </div>
+        <div class="mini-stats" id="mini-stats"></div>
+        <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Processos pendentes</div>
+        <div id="proc-pendentes-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⏱ Tempo de Tramitação</span>
+        </div>
+        <div id="bar-chart"></div>
+        <div class="info-box" id="info-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ESTOQUE ── -->
+  <div id="estoque" class="tab-content">
+    <div class="filter-bar">
+      <input class="filter-input" id="search-input" type="search" placeholder="🔍 Buscar material..." oninput="renderEstoqueTable()">
+      <button class="filter-btn active" id="btn-todos"   onclick="setFilter('todos',this)">Todos</button>
+      <button class="filter-btn" id="btn-ruptura" onclick="setFilter('ruptura',this)">Ruptura</button>
+      <button class="filter-btn" id="btn-critico" onclick="setFilter('critico',this)">Crítico</button>
+      <button class="filter-btn" id="btn-alerta"  onclick="setFilter('alerta',this)">Alerta</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Status</th><th>Cód.</th><th>Material</th>
+            <th style="text-align:right">Saldo</th>
+            <th style="text-align:right">Consumo/mês</th>
+            <th>Ruptura</th>
+            <th style="text-align:center">Dias</th>
+            <th>Instrumento</th>
+            <th>Vencimento</th>
+          </tr></thead>
+          <tbody id="estoque-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONTRATOS ── -->
+  <div id="contratos" class="tab-content">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header">
+        <span class="card-title">📄 Contratos e Atas Vigentes — Saldo de Qtde</span>
+        <span class="card-badge badge badge-green" id="contratos-count"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Instrumento</th><th>Material</th>
+            <th style="text-align:right">Qtde Contratada</th>
+            <th style="text-align:right">Qtde Requisitada</th>
+            <th style="text-align:right">Qtde Restante</th>
+            <th style="text-align:right">Preço Unit.</th>
+            <th style="text-align:right">Valor Total</th>
+            <th>Consumo %</th>
+          </tr></thead>
+          <tbody id="contratos-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REQUISIÇÕES ── -->
+  <div id="requisicoes" class="tab-content">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⏳ Pendentes</span>
+          <span class="card-badge badge badge-crit" id="req-pend-count"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Memo</th><th>Material</th><th style="text-align:right">Qtd</th><th>Processo</th></tr></thead>
+            <tbody id="req-pendentes-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">✅ Entregues</span>
+          <span class="card-badge badge badge-ok" id="req-ent-count"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Memo</th><th>Material</th><th style="text-align:right">Qtd</th><th>Proc. Pagto.</th></tr></thead>
+            <tbody id="req-entregues-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TRAMITAÇÃO ── -->
+  <div id="tramitacao" class="tab-content">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header">
+        <span class="card-title">📊 Tempo Médio por Tipo de Processo</span>
+        <span class="card-badge badge badge-blue" id="tram-total"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Tipo de Processo</th>
+            <th style="text-align:center">Processos</th>
+            <th style="text-align:center">Média (dias)</th>
+            <th>Classificação</th>
+            <th style="min-width:140px">Velocidade</th>
+          </tr></thead>
+          <tbody id="tram-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="three-col" id="tram-summary"></div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /app -->
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <button class="bnav-item active" onclick="showTab('visao-geral',null,'visao-geral')">
+      <span class="bnav-icon-wrap"><span class="bnav-icon">📊</span></span>
+      <span class="bnav-label">Geral</span>
+    </button>
+    <button class="bnav-item" onclick="showTab('estoque',null,'estoque')">
+      <span class="bnav-icon-wrap">
+        <span class="bnav-icon">📦</span>
+        <span class="bnav-badge" id="mobile-badge-estoque"></span>
+      </span>
+      <span class="bnav-label">Estoque</span>
+    </button>
+    <button class="bnav-item" onclick="showTab('contratos',null,'contratos')">
+      <span class="bnav-icon-wrap"><span class="bnav-icon">📄</span></span>
+      <span class="bnav-label">Contratos</span>
+    </button>
+    <button class="bnav-item" onclick="showTab('requisicoes',null,'requisicoes')">
+      <span class="bnav-icon-wrap">
+        <span class="bnav-icon">📋</span>
+        <span class="bnav-badge" id="mobile-badge-req"></span>
+      </span>
+      <span class="bnav-label">Requisições</span>
+    </button>
+    <button class="bnav-item" onclick="showTab('tramitacao',null,'tramitacao')">
+      <span class="bnav-icon-wrap"><span class="bnav-icon">⏱</span></span>
+      <span class="bnav-label">Tramitação</span>
+    </button>
+  </div>
+</nav>
+
 <script>
-const MULT = {
-  M1:{label:"Múltipla 1", legs:[
-    ["EUA","Classificar",1.18],["Espanha","Vencedor",1.22],["Argentina","Vencedor",1.35],
-    ["Canadá","Classificar",1.10],["Coreia do Sul","Classificar",1.38],["Alemanha","Top 2",1.08],
-    ["Países Baixos","Top 2",1.27],["França","Top 2",1.10],["Portugal","Top 2",1.10],
-    ["Bélgica","Top 2",1.10],["Croácia","Classificar",1.14],["Marrocos","Classificar",1.15]]},
-  M2:{label:"Múltipla 2", legs:[
-    ["Espanha","Vencedor",1.22],["Noruega","Top 2",1.55],["Argentina","Vencedor",1.35],
-    ["Portugal","Vencedor",1.45],["Croácia","Top 2",1.35],["México","Vencedor",1.65],
-    ["Suíça","Top 2",1.20],["Brasil","Vencedor",1.25],["EUA","Top 2",1.40],
-    ["Alemanha","Vencedor",1.30],["Países Baixos","Vencedor",1.75],["Egito","Classificar",1.30]]},
-  M3:{label:"Múltipla 3", legs:[
-    ["México","Vencedor",1.65],["Canadá","Vencedor",3.00],["Brasil","Vencedor",1.25],
-    ["EUA","Vencedor",2.37],["Alemanha","Vencedor",1.30],["Países Baixos","Vencedor",1.75],
-    ["Bélgica","Vencedor",1.35],["Espanha","Vencedor",1.22],["França","Vencedor",1.40],
-    ["Argentina","Vencedor",1.35],["Portugal","Vencedor",1.45],["Inglaterra","Vencedor",1.30]]}
-};
+// ════════════════════════════════════════════
+//  DADOS
+// ════════════════════════════════════════════
+const TODAY = new Date("2026-05-28");
 
-const GROUPS = [
-  {g:"A",t:[["México","MEX"],["África do Sul","RSA"],["Coreia do Sul","KOR"],["Rep. Tcheca","CZE"]]},
-  {g:"B",t:[["Canadá","CAN"],["Catar","QAT"],["Suíça","SUI"],["Bósnia","BIH"]]},
-  {g:"C",t:[["Brasil","BRA"],["Marrocos","MAR"],["Haiti","HAI"],["Escócia","SCO"]]},
-  {g:"D",t:[["EUA","USA"],["Paraguai","PAR"],["Austrália","AUS"],["Turquia","TUR"]]},
-  {g:"E",t:[["Alemanha","GER"],["Curaçao","CUW"],["Costa do Marfim","CIV"],["Equador","ECU"]]},
-  {g:"F",t:[["Países Baixos","NED"],["Japão","JPN"],["Tunísia","TUN"],["Suécia","SWE"]]},
-  {g:"G",t:[["Bélgica","BEL"],["Egito","EGY"],["Irã","IRN"],["Nova Zelândia","NZL"]]},
-  {g:"H",t:[["Espanha","ESP"],["Cabo Verde","CPV"],["Arábia Saudita","KSA"],["Uruguai","URU"]]},
-  {g:"I",t:[["França","FRA"],["Senegal","SEN"],["Noruega","NOR"],["Iraque","IRQ"]]},
-  {g:"J",t:[["Argentina","ARG"],["Argélia","ALG"],["Áustria","AUT"],["Jordânia","JOR"]]},
-  {g:"K",t:[["Portugal","POR"],["Uzbequistão","UZB"],["Colômbia","COL"],["RD Congo","COD"]]},
-  {g:"L",t:[["Inglaterra","ENG"],["Croácia","CRO"],["Gana","GHA"],["Panamá","PAN"]]}
+const estoque = [
+  {cod:16513,nome:"Açúcar",saldo:7300,consumo:3000,ruptura:new Date("2026-08-09"),instrumento:"Contrato",vencimento:new Date("2027-02-23")},
+  {cod:29405,nome:"Café Superior",saldo:29182,consumo:4500,ruptura:new Date("2026-12-08"),instrumento:"Emp. Simples",vencimento:null},
+  {cod:16077,nome:"Chá de Boldo",saldo:0,consumo:210,ruptura:new Date("2026-05-28"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16075,nome:"Chá de Camomila",saldo:977,consumo:340,ruptura:new Date("2026-08-22"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:29145,nome:"Chá de Capim Cidreira",saldo:162,consumo:340,ruptura:new Date("2026-06-11"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16073,nome:"Chá de Erva Doce",saldo:975,consumo:320,ruptura:new Date("2026-08-27"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16076,nome:"Chá de Frutas Vermelhas",saldo:556,consumo:340,ruptura:new Date("2026-07-16"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16074,nome:"Chá de Hortelã",saldo:1446,consumo:360,ruptura:new Date("2026-09-25"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:7303,nome:"Copo Água",saldo:8741,consumo:4000,ruptura:new Date("2026-08-01"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7304,nome:"Copo Café",saldo:4963,consumo:1050,ruptura:new Date("2026-10-16"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5859,nome:"Flanela Branca",saldo:1111,consumo:240,ruptura:new Date("2026-10-13"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:17801,nome:"Detergente",saldo:5471,consumo:950,ruptura:new Date("2026-11-16"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5797,nome:"Sabão de Coco",saldo:3307,consumo:680,ruptura:new Date("2026-10-20"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5795,nome:"Água Sanitária",saldo:667,consumo:195,ruptura:new Date("2026-09-07"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5861,nome:"Esponja",saldo:2265,consumo:500,ruptura:new Date("2026-10-10"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7420,nome:"Jarra para Água (CAEDI)",saldo:225,consumo:1,ruptura:new Date("2044-11-19"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:14896,nome:"Pilha Alcalina AAA",saldo:32,consumo:61,ruptura:new Date("2026-06-12"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:5359,nome:"Pilha Média",saldo:46,consumo:12,ruptura:new Date("2026-09-20"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:5342,nome:"Pilha Pequena AA",saldo:252,consumo:140,ruptura:new Date("2026-07-21"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:2078,nome:"Papel A4",saldo:2391,consumo:950,ruptura:new Date("2026-08-11"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:28422,nome:"Pendrive 32 GB",saldo:34,consumo:60,ruptura:new Date("2026-06-14"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1714,nome:"Caneta Esferográfica Azul",saldo:1713,consumo:900,ruptura:new Date("2026-07-24"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1795,nome:"Cola em Bastão",saldo:173,consumo:90,ruptura:new Date("2026-07-24"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1800,nome:"Cola Plástica",saldo:0,consumo:40,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1901,nome:"Corretivo Líquido",saldo:50,consumo:20,ruptura:new Date("2026-08-11"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2053,nome:"Fita Adesiva Transparente",saldo:192,consumo:40,ruptura:new Date("2026-10-19"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30414,nome:"Pincel Atômico Preto",saldo:13,consumo:10,ruptura:new Date("2026-07-06"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:25298,nome:"Pincel Atômico Azul",saldo:33,consumo:10,ruptura:new Date("2026-09-04"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:25299,nome:"Pincel Atômico Vermelho",saldo:35,consumo:8,ruptura:new Date("2026-10-06"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30381,nome:"Pincel Quadro Magnético Azul",saldo:35,consumo:10,ruptura:new Date("2026-09-10"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30382,nome:"Pincel Quadro Magnético Preto",saldo:30,consumo:10,ruptura:new Date("2026-08-26"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30383,nome:"Pincel Quadro Magnético Vermelho",saldo:7,consumo:10,ruptura:new Date("2026-06-18"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2453,nome:"Fita para Empacotamento",saldo:1365,consumo:283,ruptura:new Date("2026-10-19"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2241,nome:"Envelope Ofício Câmara 114x229mm",saldo:1,consumo:5,ruptura:new Date("2026-06-03"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
+  {cod:2236,nome:"Envelope Separata Branco 176x250mm",saldo:10720,consumo:2000,ruptura:new Date("2026-11-04"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:13671,nome:"Plástico Transparente Bolha",saldo:0,consumo:1,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2027-03-24")},
+  {cod:18085,nome:"Etiqueta 138,11x106,36mm",saldo:1553,consumo:100,ruptura:new Date("2027-09-05"),instrumento:"Ata RP",vencimento:new Date("2020-10-16")},
+  {cod:5851,nome:"Lã de Aço Bombril",saldo:1089,consumo:200,ruptura:new Date("2026-11-07"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7464,nome:"Garrafa Térmica",saldo:78,consumo:50,ruptura:new Date("2026-07-13"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7496,nome:"Pano de Prato",saldo:951,consumo:240,ruptura:new Date("2026-09-23"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:17330,nome:"Caixa Arquivo 100mm x 260mm",saldo:1200,consumo:220,ruptura:new Date("2026-11-07"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2448,nome:"Caixa Arquivo 110mm x 280mm",saldo:600,consumo:100,ruptura:new Date("2026-11-24"),instrumento:"Ata RP",vencimento:new Date("2024-07-18")},
+  {cod:1816,nome:"Capa para Avulso",saldo:7303,consumo:276,ruptura:new Date("2028-07-29"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:1817,nome:"Capa para Processo",saldo:80,consumo:25,ruptura:new Date("2026-09-01"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:2240,nome:"Envelope Carta Câmara",saldo:1091,consumo:10,ruptura:new Date("2035-05-14"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
+  {cod:27762,nome:"Envelope Grande Kraft c/ Timbre",saldo:0,consumo:190,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
+  {cod:16462,nome:"Pasta Polipropileno c/ Aba e Elástico",saldo:1306,consumo:65,ruptura:new Date("2028-01-20"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:2253,nome:"Envelope Kraft 80x116mm Votação",saldo:1825,consumo:20,ruptura:new Date("2033-11-24"),instrumento:"Emp. Simples",vencimento:null},
+  {cod:2237,nome:"Envelope Kraft para Documento c/ Timbre",saldo:0,consumo:1700,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
+  {cod:1834,nome:"Pasta Suspensa para Arquivo",saldo:138,consumo:15,ruptura:new Date("2027-02-28"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:7495,nome:"Coador Pequeno",saldo:273,consumo:40,ruptura:new Date("2026-12-18"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7503,nome:"Coador Grande",saldo:158,consumo:25,ruptura:new Date("2026-12-03"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
 ];
 
-const MATCHES = [
-  {grp:"Grupo D · 1ª rodada", when:"12 jun · 22h", a:["USA","EUA"], b:["PAR","Paraguai"],
-    tags:[["classif","EUA classificar"],["top2","EUA top 2"],["venc","EUA vencedor"]],
-    why:"Sua aposta mais escalonada começa aqui: EUA carrega 3 níveis (M1, M2 e M3)."},
-  {grp:"Grupo C · 1ª rodada", when:"13 jun · 19h", a:["BRA","Brasil"], b:["MAR","Marrocos"],
-    tags:[["venc","Brasil vencedor"],["classif","Marrocos classificar"]],
-    why:"Duas apostas suas frente a frente no apito inicial — Brasil 1º (M2/M3) e Marrocos classificado (M1)."},
-  {grp:"Grupo L · 1ª rodada", when:"17 jun · 17h", a:["ENG","Inglaterra"], b:["CRO","Croácia"],
-    tags:[["venc","Inglaterra vencedor"],["top2","Croácia top 2"],["classif","Croácia classificar"]],
-    why:"Três apostas num jogo só. O cenário ideal é Inglaterra em 1º e Croácia em 2º."},
-  {grp:"Grupo A · 2ª rodada", when:"18 jun · 22h", a:["MEX","México"], b:["KOR","Coreia do Sul"],
-    tags:[["venc","México vencedor"],["classif","Coreia classificar"]],
-    why:"Seus dois palpites do Grupo A se cruzam: México mira o 1º (M2/M3), Coreia precisa do top 2 ou melhor 3º (M1)."},
-  {grp:"Grupo B · 3ª rodada", when:"24 jun", a:["CAN","Canadá"], b:["SUI","Suíça"],
-    tags:[["venc","Canadá vencedor"],["top2","Suíça top 2"]],
-    why:"Cenário perfeito para você: Canadá em 1º (vencedor, M3) e Suíça em 2º (top 2, M2) — os dois palpites cabem juntos."},
-  {grp:"Grupo H · 3ª rodada", when:"rodada final", a:["ESP","Espanha"], b:["URU","Uruguai"],
-    tags:[["venc","Espanha vencedor"]],
-    why:"Espanha (favorita à liderança em M1/M2/M3) tem no Uruguai o maior obstáculo para fechar o grupo em 1º."}
+const contratos = [
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:16077,nome:"Chá de Boldo",qtdContratada:2000,preco:2.73,qtdRequisitada:2000,qtdRestante:0},
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:16075,nome:"Chá de Camomila",qtdContratada:4700,preco:2.96,qtdRequisitada:3300,qtdRestante:1400},
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:29145,nome:"Chá de Capim Cidreira",qtdContratada:4000,preco:2.48,qtdRequisitada:2900,qtdRestante:1100},
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:16073,nome:"Chá de Erva Doce",qtdContratada:4000,preco:2.94,qtdRequisitada:3200,qtdRestante:800},
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:16076,nome:"Chá de Frutas Vermelhas",qtdContratada:4500,preco:3.50,qtdRequisitada:3100,qtdRestante:1400},
+  {instr:"Ata 38/2025 - Arcanjos Alimentos",cod:16074,nome:"Chá de Hortelã",qtdContratada:5300,preco:2.45,qtdRequisitada:3300,qtdRestante:2000},
+  {instr:"Contrato 029.1/2025",cod:16513,nome:"Açúcar",qtdContratada:49000,preco:3.80,qtdRequisitada:0,qtdRestante:49000},
+  {instr:"Ata 33/2025 - PICUHY DISTRIBUIDORA",cod:7303,nome:"Copo Água",qtdContratada:34913,preco:5.25,qtdRequisitada:10500,qtdRestante:24413},
+  {instr:"Ata 35/2025 - CDV COMERCIAL",cod:7304,nome:"Copo Café",qtdContratada:16150,preco:1.72,qtdRequisitada:5800,qtdRestante:10350},
+  {instr:"Josemar Wellington Lourenço",cod:1714,nome:"Caneta Esferográfica Azul",qtdContratada:11400,preco:0.44,qtdRequisitada:5500,qtdRestante:5900},
+  {instr:"Josemar Wellington Lourenço",cod:1795,nome:"Cola em Bastão",qtdContratada:900,preco:0.75,qtdRequisitada:450,qtdRestante:450},
+  {instr:"Josemar Wellington Lourenço",cod:1901,nome:"Corretivo Líquido",qtdContratada:330,preco:1.40,qtdRequisitada:180,qtdRestante:150},
+  {instr:"Josemar Wellington Lourenço",cod:2053,nome:"Fita Adesiva Transparente",qtdContratada:700,preco:0.68,qtdRequisitada:450,qtdRestante:250},
+  {instr:"Jose Adeildo Alves Siqueira",cod:1800,nome:"Cola Plástica",qtdContratada:600,preco:1.81,qtdRequisitada:140,qtdRestante:460},
+  {instr:"Rafa Paper Distribuidora",cod:2453,nome:"Fita para Empacotamento",qtdContratada:6100,preco:2.42,qtdRequisitada:2400,qtdRestante:3700},
+  {instr:"Rafa Paper Distribuidora",cod:30414,nome:"Pincel Atômico Preto",qtdContratada:350,preco:1.32,qtdRequisitada:180,qtdRestante:170},
+  {instr:"Rafa Paper Distribuidora",cod:25298,nome:"Pincel Atômico Azul",qtdContratada:400,preco:1.34,qtdRequisitada:200,qtdRestante:200},
+  {instr:"Rafa Paper Distribuidora",cod:25299,nome:"Pincel Atômico Vermelho",qtdContratada:250,preco:1.34,qtdRequisitada:140,qtdRestante:110},
+  {instr:"Rafa Paper Distribuidora",cod:30381,nome:"Pincel Quadro Azul",qtdContratada:200,preco:1.23,qtdRequisitada:150,qtdRestante:50},
+  {instr:"Rafa Paper Distribuidora",cod:30382,nome:"Pincel Quadro Preto",qtdContratada:170,preco:1.23,qtdRequisitada:170,qtdRestante:0},
+  {instr:"Rafa Paper Distribuidora",cod:30383,nome:"Pincel Quadro Vermelho",qtdContratada:150,preco:1.23,qtdRequisitada:40,qtdRestante:110},
+  {instr:"MultPaper Distribuidora",cod:2078,nome:"Papel A4",qtdContratada:16481,preco:20.40,qtdRequisitada:4000,qtdRestante:12481},
+  {instr:"Aleksander Nunes Marques",cod:28422,nome:"Pendrive 32 GB",qtdContratada:1000,preco:23.32,qtdRequisitada:0,qtdRestante:1000},
+  {instr:"BBC Distribuidora",cod:2237,nome:"Envelope Kraft c/ Timbre",qtdContratada:19000,preco:0.75,qtdRequisitada:17000,qtdRestante:2000},
+  {instr:"Ata 51/2025 - BEEVOLT ENERGY",cod:5357,nome:"Bateria Alcalina 9V",qtdContratada:50,preco:7.00,qtdRequisitada:50,qtdRestante:0},
+  {instr:"Ata 51/2025 - BEEVOLT ENERGY",cod:14896,nome:"Pilha Alcalina AAA",qtdContratada:1100,preco:1.56,qtdRequisitada:650,qtdRestante:450},
+  {instr:"Ata 51/2025 - BEEVOLT ENERGY",cod:5359,nome:"Pilha Média",qtdContratada:100,preco:5.02,qtdRequisitada:60,qtdRestante:40},
+  {instr:"Ata 51/2025 - BEEVOLT ENERGY",cod:5342,nome:"Pilha Pequena AA",qtdContratada:2300,preco:1.52,qtdRequisitada:1250,qtdRestante:1050},
+  {instr:"Ata 53/2025 - N SOLUÇÕES EM TI",cod:13671,nome:"Plástico Transparente Bolha",qtdContratada:200,preco:3.36,qtdRequisitada:100,qtdRestante:100},
 ];
 
-function fmtType(t){return t==="Classificar"?"classif":t==="Top 2"?"top2":"venc";}
-
-const FLAG={
-  "México":"mx","África do Sul":"za","Coreia do Sul":"kr","Rep. Tcheca":"cz",
-  "Canadá":"ca","Catar":"qa","Suíça":"ch","Bósnia":"ba",
-  "Brasil":"br","Marrocos":"ma","Haiti":"ht","Escócia":"gb-sct",
-  "EUA":"us","Paraguai":"py","Austrália":"au","Turquia":"tr",
-  "Alemanha":"de","Curaçao":"cw","Costa do Marfim":"ci","Equador":"ec",
-  "Países Baixos":"nl","Japão":"jp","Tunísia":"tn","Suécia":"se",
-  "Bélgica":"be","Egito":"eg","Irã":"ir","Nova Zelândia":"nz",
-  "Espanha":"es","Cabo Verde":"cv","Arábia Saudita":"sa","Uruguai":"uy",
-  "França":"fr","Senegal":"sn","Noruega":"no","Iraque":"iq",
-  "Argentina":"ar","Argélia":"dz","Áustria":"at","Jordânia":"jo",
-  "Portugal":"pt","Uzbequistão":"uz","Colômbia":"co","RD Congo":"cd",
-  "Inglaterra":"gb-eng","Croácia":"hr","Gana":"gh","Panamá":"pa"
-};
-function flag(name,cls){const c=FLAG[name];return c?`<span class="fi fi-${c} ${cls||''}"></span>`:"";}
-
-// ---- multiples (com marcação de status) ----
-const STATES=["pending","won","lost"];
-const ICONS={pending:"⏳",won:"✅",lost:"❌"};
-function getBetState(mk,i){return localStorage.getItem("bet-"+mk+"-"+i)||"pending";}
-function setBetState(mk,i,s){localStorage.setItem("bet-"+mk+"-"+i,s);}
-function updateCount(card,mk,total){
-  const won=[...Array(total)].filter((_,i)=>getBetState(mk,i)==="won").length;
-  const lost=[...Array(total)].filter((_,i)=>getBetState(mk,i)==="lost").length;
-  const el=card.querySelector(".mcount");
-  if(el) el.innerHTML=`<b>${won}</b>/${total} confirmadas`+(lost?` · <span style="color:var(--red)">${lost} perdida${lost>1?"s":""}</span>`:"");
-}
-function renderMult(){
-  const grid=document.getElementById("mult-grid");
-  Object.keys(MULT).forEach(key=>{
-    const m=MULT[key];
-    let combined=1; m.legs.forEach(l=>combined*=l[2]);
-    const prob=100/combined;
-    const legsHtml=m.legs.map((l,i)=>{
-      const cls=fmtType(l[1]);
-      const st=getBetState(key,i);
-      return `<div class="leg ${st}" data-mk="${key}" data-li="${i}">`+
-        `<span class="lstatus">${ICONS[st]}</span>`+
-        `<span class="tdot t-${cls}"></span>`+
-        `${flag(l[0])}<span class="lname">${l[0]}</span>`+
-        `<span class="ltype">${l[1]}</span>`+
-        `<span class="lodd">${l[2].toFixed(2)}</span></div>`;
-    }).join("");
-    const card=document.createElement("div");
-    card.className="mcard";
-    card.innerHTML=
-      `<div class="mhead"><h3>${m.label}</h3><span class="mcount"></span><span class="legs">${m.legs.length} seleções</span></div>`+
-      legsHtml+
-      `<div class="mfoot">`+
-        `<div class="combo"><small>ODD COMBINADA</small>${combined.toFixed(2)}</div>`+
-        `<div class="prob"><span class="pv">${prob.toFixed(1)}%</span><small>prob. implícita</small></div>`+
-      `</div>`+
-      `<button class="hl-btn" data-m="${key}">Destacar nos grupos</button>`;
-    grid.appendChild(card);
-    updateCount(card,key,m.legs.length);
-    // toggle on click
-    card.querySelectorAll(".leg").forEach(leg=>{
-      leg.addEventListener("click",()=>{
-        const mk=leg.dataset.mk, li=+leg.dataset.li;
-        const cur=getBetState(mk,li);
-        const next=STATES[(STATES.indexOf(cur)+1)%3];
-        setBetState(mk,li,next);
-        leg.className="leg "+next;
-        leg.querySelector(".lstatus").textContent=ICONS[next];
-        updateCount(card,mk,MULT[mk].legs.length);
-      });
-    });
-  });
-  grid.querySelectorAll(".hl-btn").forEach(b=>{
-    b.addEventListener("click",()=>{
-      const m=b.dataset.m;
-      const isOn=b.classList.contains("on");
-      document.querySelectorAll(".hl-btn").forEach(x=>x.classList.remove("on"));
-      const target=isOn?"all":m;
-      if(!isOn) b.classList.add("on");
-      setFilter(target);
-      document.querySelectorAll(".filterbar .fbtn").forEach(x=>x.classList.toggle("active",x.dataset.f===target));
-      document.getElementById("group-grid").scrollIntoView({behavior:"smooth",block:"start"});
-    });
-  });
-}
-
-// ---- key matches ----
-function renderMatches(){
-  const row=document.getElementById("match-row");
-  MATCHES.forEach(mt=>{
-    const tags=mt.tags.map(t=>`<span class="btag ${t[0]}"><span class="tdot t-${t[0]}"></span>${t[1]}</span>`).join("");
-    const el=document.createElement("div");
-    el.className="match";
-    el.innerHTML=
-      `<div class="when"><span class="grp">${mt.grp}</span><span>${mt.when}</span></div>`+
-      `<div class="scoreline">`+
-        `<div class="team">${flag(mt.a[1],'flag-lg')}<span class="code">${mt.a[0]}</span><span class="tn">${mt.a[1]}</span></div>`+
-        `<span class="vs">VS</span>`+
-        `<div class="team">${flag(mt.b[1],'flag-lg')}<span class="code">${mt.b[0]}</span><span class="tn">${mt.b[1]}</span></div>`+
-      `</div>`+
-      `<div class="whyrow">${tags}</div>`+
-      `<div class="why${mt.warn?' warn':''}">${mt.why}</div>`;
-    row.appendChild(el);
-  });
-}
-
-// ---- groups ----
-const BETS={};
-Object.keys(MULT).forEach(key=>MULT[key].legs.forEach(l=>{
-  const name=l[0];
-  if(!BETS[name]) BETS[name]={};
-  const k=l[1];
-  if(!BETS[name][k]) BETS[name][k]={type:l[1],odd:l[2],mults:[]};
-  BETS[name][k].mults.push(key);
-}));
-
-function renderGroups(){
-  const grid=document.getElementById("group-grid");
-  GROUPS.forEach(G=>{
-    const rows=G.t.map(team=>{
-      const name=team[0], code=team[1];
-      const b=BETS[name];
-      let tags="", marked="", dataM="";
-      if(b){
-        marked="marked";
-        const mset=new Set();
-        tags='<span class="mtags">'+Object.values(b).map(x=>{
-          const cls=fmtType(x.type);
-          x.mults.forEach(mm=>mset.add(mm));
-          return `<span class="mtag ${cls}" title="${x.type} · ${x.odd.toFixed(2)}">${x.mults.join("·")}</span>`;
-        }).join("")+'</span>';
-        dataM=` data-m="${[...mset].join(" ")}"`;
-      }
-      return `<tr class="${marked}" data-team="${name}"${dataM}>`+
-        `<td class="team-cell">${flag(name,'fl')}<span class="tcode">${code}</span>${name}${tags}</td>`+
-        `<td data-s="pts">0</td><td data-s="j">0</td><td data-s="sg">0</td></tr>`;
-    }).join("");
-    const card=document.createElement("div");
-    card.className="gcard";
-    card.dataset.g=G.g;
-    card.innerHTML=
-      `<div class="gtop"><span class="gletter">${G.g}</span><span class="gl">GRUPO ${G.g}</span></div>`+
-      `<table><thead><tr><th class="tl">Seleção</th><th>P</th><th>J</th><th>SG</th></tr></thead>`+
-      `<tbody>${rows}</tbody></table>`;
-    grid.appendChild(card);
-  });
-}
-
-function setFilter(f){
-  document.querySelectorAll("#group-grid tr.marked").forEach(tr=>{
-    if(f==="all"){tr.classList.remove("row-dim");return;}
-    const ms=(tr.dataset.m||"").split(" ");
-    tr.classList.toggle("row-dim", ms.indexOf(f)===-1);
-  });
-  document.querySelectorAll("#group-grid .gcard").forEach(card=>{
-    if(f==="all"){card.classList.remove("dim");return;}
-    const has=[...card.querySelectorAll("tr.marked")].some(tr=>(tr.dataset.m||"").split(" ").indexOf(f)>-1);
-    card.classList.toggle("dim",!has);
-  });
-}
-
-const FIXTURES=[
-  {r:1,d:"11 jun",dow:"qui",t:"16h",g:"A",a:"México",b:"África do Sul",c:"Cidade do México"},
-  {r:1,d:"11 jun",dow:"qui",t:"23h",g:"A",a:"Coreia do Sul",b:"Rep. Tcheca",c:"Guadalajara"},
-  {r:1,d:"12 jun",dow:"sex",t:"16h",g:"B",a:"Canadá",b:"Bósnia",c:"Toronto"},
-  {r:1,d:"12 jun",dow:"sex",t:"22h",g:"D",a:"EUA",b:"Paraguai",c:"Los Angeles"},
-  {r:1,d:"13 jun",dow:"sáb",t:"1h",g:"D",a:"Austrália",b:"Turquia",c:"Vancouver"},
-  {r:1,d:"13 jun",dow:"sáb",t:"16h",g:"B",a:"Catar",b:"Suíça",c:"San Francisco"},
-  {r:1,d:"13 jun",dow:"sáb",t:"19h",g:"C",a:"Brasil",b:"Marrocos",c:"Nova York/NJ"},
-  {r:1,d:"13 jun",dow:"sáb",t:"22h",g:"C",a:"Haiti",b:"Escócia",c:"Boston"},
-  {r:1,d:"14 jun",dow:"dom",t:"14h",g:"E",a:"Alemanha",b:"Curaçao",c:"Houston"},
-  {r:1,d:"14 jun",dow:"dom",t:"17h",g:"F",a:"Países Baixos",b:"Japão",c:"Dallas"},
-  {r:1,d:"14 jun",dow:"dom",t:"20h",g:"E",a:"Costa do Marfim",b:"Equador",c:"Filadélfia"},
-  {r:1,d:"14 jun",dow:"dom",t:"23h",g:"F",a:"Suécia",b:"Tunísia",c:"Monterrey"},
-  {r:1,d:"15 jun",dow:"seg",t:"13h",g:"H",a:"Espanha",b:"Cabo Verde",c:"Atlanta"},
-  {r:1,d:"15 jun",dow:"seg",t:"16h",g:"G",a:"Bélgica",b:"Egito",c:"Seattle"},
-  {r:1,d:"15 jun",dow:"seg",t:"19h",g:"H",a:"Arábia Saudita",b:"Uruguai",c:"Miami"},
-  {r:1,d:"15 jun",dow:"seg",t:"22h",g:"G",a:"Irã",b:"Nova Zelândia",c:"Los Angeles"},
-  {r:1,d:"16 jun",dow:"ter",t:"14h",g:"J",a:"Argentina",b:"Argélia",c:"Kansas City"},
-  {r:1,d:"16 jun",dow:"ter",t:"16h",g:"I",a:"França",b:"Senegal",c:"Nova York/NJ"},
-  {r:1,d:"16 jun",dow:"ter",t:"19h",g:"I",a:"Iraque",b:"Noruega",c:"Boston"},
-  {r:1,d:"17 jun",dow:"qua",t:"1h",g:"J",a:"Áustria",b:"Jordânia",c:"San Francisco"},
-  {r:1,d:"17 jun",dow:"qua",t:"14h",g:"K",a:"Portugal",b:"RD Congo",c:"Houston"},
-  {r:1,d:"17 jun",dow:"qua",t:"17h",g:"L",a:"Inglaterra",b:"Croácia",c:"Dallas"},
-  {r:1,d:"17 jun",dow:"qua",t:"20h",g:"L",a:"Gana",b:"Panamá",c:"Toronto"},
-  {r:1,d:"17 jun",dow:"qua",t:"23h",g:"K",a:"Uzbequistão",b:"Colômbia",c:"Cidade do México"},
-  {r:2,d:"18 jun",dow:"qui",t:"13h",g:"A",a:"Rep. Tcheca",b:"África do Sul",c:"Atlanta"},
-  {r:2,d:"18 jun",dow:"qui",t:"16h",g:"B",a:"Suíça",b:"Bósnia",c:"Los Angeles"},
-  {r:2,d:"18 jun",dow:"qui",t:"19h",g:"B",a:"Canadá",b:"Catar",c:"Vancouver"},
-  {r:2,d:"18 jun",dow:"qui",t:"22h",g:"A",a:"México",b:"Coreia do Sul",c:"Guadalajara"},
-  {r:2,d:"19 jun",dow:"sex",t:"1h",g:"D",a:"Turquia",b:"Paraguai",c:"San Francisco"},
-  {r:2,d:"19 jun",dow:"sex",t:"16h",g:"D",a:"EUA",b:"Austrália",c:"Seattle"},
-  {r:2,d:"19 jun",dow:"sex",t:"19h",g:"C",a:"Escócia",b:"Marrocos",c:"Boston"},
-  {r:2,d:"19 jun",dow:"sex",t:"22h",g:"C",a:"Brasil",b:"Haiti",c:"Filadélfia"},
-  {r:2,d:"20 jun",dow:"sáb",t:"14h",g:"F",a:"Países Baixos",b:"Suécia",c:"Houston"},
-  {r:2,d:"20 jun",dow:"sáb",t:"17h",g:"E",a:"Alemanha",b:"Costa do Marfim",c:"Toronto"},
-  {r:2,d:"20 jun",dow:"sáb",t:"21h",g:"E",a:"Equador",b:"Curaçao",c:"Kansas City"},
-  {r:2,d:"21 jun",dow:"dom",t:"1h",g:"F",a:"Tunísia",b:"Japão",c:"Monterrey"},
-  {r:2,d:"21 jun",dow:"dom",t:"13h",g:"H",a:"Espanha",b:"Arábia Saudita",c:"Atlanta"},
-  {r:2,d:"21 jun",dow:"dom",t:"16h",g:"G",a:"Bélgica",b:"Irã",c:"Los Angeles"},
-  {r:2,d:"21 jun",dow:"dom",t:"19h",g:"H",a:"Uruguai",b:"Cabo Verde",c:"Miami"},
-  {r:2,d:"21 jun",dow:"dom",t:"22h",g:"G",a:"Nova Zelândia",b:"Egito",c:"Vancouver"},
-  {r:2,d:"22 jun",dow:"seg",t:"14h",g:"J",a:"Argentina",b:"Áustria",c:"Dallas"},
-  {r:2,d:"22 jun",dow:"seg",t:"18h",g:"I",a:"França",b:"Iraque",c:"Filadélfia"},
-  {r:2,d:"22 jun",dow:"seg",t:"21h",g:"I",a:"Noruega",b:"Senegal",c:"Nova York/NJ"},
-  {r:2,d:"23 jun",dow:"ter",t:"0h",g:"J",a:"Jordânia",b:"Argélia",c:"San Francisco"},
-  {r:2,d:"23 jun",dow:"ter",t:"14h",g:"K",a:"Portugal",b:"Uzbequistão",c:"Houston"},
-  {r:2,d:"23 jun",dow:"ter",t:"17h",g:"L",a:"Inglaterra",b:"Gana",c:"Boston"},
-  {r:2,d:"23 jun",dow:"ter",t:"20h",g:"L",a:"Panamá",b:"Croácia",c:"Toronto"},
-  {r:2,d:"23 jun",dow:"ter",t:"23h",g:"K",a:"Colômbia",b:"RD Congo",c:"Guadalajara"},
-  {r:3,d:"24 jun",dow:"qua",t:"16h",g:"B",a:"Suíça",b:"Canadá",c:"Vancouver"},
-  {r:3,d:"24 jun",dow:"qua",t:"16h",g:"B",a:"Bósnia",b:"Catar",c:"Seattle"},
-  {r:3,d:"24 jun",dow:"qua",t:"19h",g:"C",a:"Escócia",b:"Brasil",c:"Miami"},
-  {r:3,d:"24 jun",dow:"qua",t:"19h",g:"C",a:"Marrocos",b:"Haiti",c:"Atlanta"},
-  {r:3,d:"24 jun",dow:"qua",t:"22h",g:"A",a:"Rep. Tcheca",b:"México",c:"Cidade do México"},
-  {r:3,d:"24 jun",dow:"qua",t:"22h",g:"A",a:"África do Sul",b:"Coreia do Sul",c:"Monterrey"},
-  {r:3,d:"25 jun",dow:"qui",t:"17h",g:"E",a:"Equador",b:"Alemanha",c:"Nova York/NJ"},
-  {r:3,d:"25 jun",dow:"qui",t:"17h",g:"E",a:"Curaçao",b:"Costa do Marfim",c:"Filadélfia"},
-  {r:3,d:"25 jun",dow:"qui",t:"20h",g:"F",a:"Japão",b:"Suécia",c:"Dallas"},
-  {r:3,d:"25 jun",dow:"qui",t:"20h",g:"F",a:"Tunísia",b:"Países Baixos",c:"Kansas City"},
-  {r:3,d:"25 jun",dow:"qui",t:"23h",g:"D",a:"Turquia",b:"EUA",c:"Los Angeles"},
-  {r:3,d:"25 jun",dow:"qui",t:"23h",g:"D",a:"Paraguai",b:"Austrália",c:"San Francisco"},
-  {r:3,d:"26 jun",dow:"sex",t:"16h",g:"I",a:"Noruega",b:"França",c:"Boston"},
-  {r:3,d:"26 jun",dow:"sex",t:"16h",g:"I",a:"Senegal",b:"Iraque",c:"Toronto"},
-  {r:3,d:"26 jun",dow:"sex",t:"21h",g:"H",a:"Cabo Verde",b:"Arábia Saudita",c:"Houston"},
-  {r:3,d:"26 jun",dow:"sex",t:"21h",g:"H",a:"Uruguai",b:"Espanha",c:"Guadalajara"},
-  {r:3,d:"27 jun",dow:"sáb",t:"0h",g:"G",a:"Egito",b:"Irã",c:"Seattle"},
-  {r:3,d:"27 jun",dow:"sáb",t:"0h",g:"G",a:"Nova Zelândia",b:"Bélgica",c:"Vancouver"},
-  {r:3,d:"27 jun",dow:"sáb",t:"18h",g:"L",a:"Panamá",b:"Inglaterra",c:"Nova York/NJ"},
-  {r:3,d:"27 jun",dow:"sáb",t:"18h",g:"L",a:"Croácia",b:"Gana",c:"Filadélfia"},
-  {r:3,d:"27 jun",dow:"sáb",t:"20h30",g:"K",a:"Colômbia",b:"Portugal",c:"Miami"},
-  {r:3,d:"27 jun",dow:"sáb",t:"20h30",g:"K",a:"RD Congo",b:"Uzbequistão",c:"Atlanta"},
-  {r:3,d:"27 jun",dow:"sáb",t:"23h",g:"J",a:"Argélia",b:"Áustria",c:"Kansas City"},
-  {r:3,d:"27 jun",dow:"sáb",t:"23h",g:"J",a:"Jordânia",b:"Argentina",c:"Dallas"}
+const requisicoes = [
+  {memo:"Memo 09/2026",cod:16077,nome:"Chá de Boldo",qtd:1050,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 09/2026",cod:16075,nome:"Chá de Camomila",qtd:1800,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 09/2026",cod:29145,nome:"Chá de Capim Cidreira",qtd:1300,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 09/2026",cod:16073,nome:"Chá de Erva Doce",qtd:1600,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 09/2026",cod:16076,nome:"Chá de Frutas Vermelhas",qtd:1600,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 09/2026",cod:16074,nome:"Chá de Hortelã",qtd:1700,processo:"750.318/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 04/2026",cod:7303,nome:"Copo Água",qtd:10500,processo:"337.914/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 16/2026",cod:13671,nome:"Plástico Transparente Bolha",qtd:100,processo:"754.591/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 10/2026",cod:2078,nome:"Papel A4",qtd:4000,processo:"750.626/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:2453,nome:"Fita para Empacotamento",qtd:700,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:30414,nome:"Pincel Atômico Permanente - Preto",qtd:90,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:25298,nome:"Pincel Atômico Permanente - Azul",qtd:100,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:25299,nome:"Pincel Atômico Permanente - Vermelho",qtd:70,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:30381,nome:"Pincel Quadro Magnético - Azul",qtd:80,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:30382,nome:"Pincel Quadro Magnético - Preto",qtd:90,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 11/2026",cod:30383,nome:"Pincel Quadro Magnético - Vermelho",qtd:40,processo:"750.769/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 12/2026",cod:2237,nome:"Envelope Kraft para Documento c/ Timbre",qtd:10000,processo:"750.896/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 13/2026",cod:1714,nome:"Caneta Esferográfica Azul",qtd:3000,processo:"750.995/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 13/2026",cod:1795,nome:"Cola em Bastão",qtd:150,processo:"750.995/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 13/2026",cod:1901,nome:"Corretivo Líquido",qtd:80,processo:"750.995/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 13/2026",cod:2053,nome:"Fita Adesiva Transparente",qtd:150,processo:"750.995/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 15/2026",cod:1800,nome:"Cola Plástica",qtd:140,processo:"753.632/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 48/2025",cod:16077,nome:"Chá de Boldo",qtd:950,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 48/2025",cod:16075,nome:"Chá de Camomila",qtd:1500,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 48/2025",cod:29145,nome:"Chá de Capim Cidreira",qtd:1600,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 48/2025",cod:16073,nome:"Chá de Erva Doce",qtd:1600,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 48/2025",cod:16076,nome:"Chá de Frutas Vermelhas",qtd:1500,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 48/2025",cod:16074,nome:"Chá de Hortelã",qtd:1600,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
+  {memo:"Memo 46/2025",cod:7304,nome:"Copo Café",qtd:2600,processo:"1.279.876/2025",situacao:"entregue",pagamento:"1.400.141/2025"},
+  {memo:"Memo 03/2026",cod:7304,nome:"Copo Café",qtd:3200,processo:"337.903/2026",situacao:"entregue",pagamento:"550.559/2026"},
+  {memo:"Memo 44/2025",cod:5357,nome:"Bateria Alcalina 9V",qtd:25,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
+  {memo:"Memo 44/2025",cod:14896,nome:"Pilha Alcalina AAA 1,5V",qtd:350,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
+  {memo:"Memo 44/2025",cod:5359,nome:"Pilha Alcalina Média",qtd:40,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
+  {memo:"Memo 44/2025",cod:5342,nome:"Pilha Alcalina AA 1,5V",qtd:650,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
+  {memo:"Memo 06/2026",cod:5357,nome:"Bateria Alcalina 9V",qtd:25,processo:"382.517/2026",situacao:"entregue",pagamento:"712.848/2026"},
+  {memo:"Memo 06/2026",cod:14896,nome:"Pilha Alcalina AAA 1,5V",qtd:300,processo:"382.517/2026",situacao:"entregue",pagamento:"712.848/2026"},
+  {memo:"Memo 06/2026",cod:5359,nome:"Pilha Alcalina Média",qtd:20,processo:"382.517/2026",situacao:"entregue",pagamento:"712.848/2026"},
+  {memo:"Memo 06/2026",cod:5342,nome:"Pilha Alcalina AA 1,5V",qtd:600,processo:"382.517/2026",situacao:"entregue",pagamento:"712.848/2026"},
+  {memo:"Memo 50/2025",cod:2237,nome:"Envelope Kraft para Documento c/ Timbre",qtd:7000,processo:"1.413.504/2025",situacao:"entregue",pagamento:"294.264/2026"},
+  {memo:"Memo 02/2026",cod:1714,nome:"Caneta Esferográfica Azul",qtd:2500,processo:"297.024/2026",situacao:"entregue",pagamento:"425.327/2026"},
+  {memo:"Memo 02/2026",cod:1795,nome:"Cola em Bastão",qtd:300,processo:"297.024/2026",situacao:"entregue",pagamento:"425.327/2026"},
+  {memo:"Memo 02/2026",cod:1901,nome:"Corretivo Líquido",qtd:100,processo:"297.024/2026",situacao:"entregue",pagamento:"425.327/2026"},
+  {memo:"Memo 02/2026",cod:2053,nome:"Fita Adesiva Transparente",qtd:300,processo:"297.024/2026",situacao:"entregue",pagamento:"425.327/2026"},
+  {memo:"Memo 07/2026",cod:2453,nome:"Fita para Empacotamento",qtd:1700,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 07/2026",cod:30414,nome:"Pincel Atômico Permanente - Preto",qtd:90,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 07/2026",cod:25298,nome:"Pincel Atômico Permanente - Azul",qtd:100,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 07/2026",cod:25299,nome:"Pincel Atômico Permanente - Vermelho",qtd:70,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 07/2026",cod:30381,nome:"Pincel Quadro Magnético - Azul",qtd:70,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 07/2026",cod:30382,nome:"Pincel Quadro Magnético - Preto",qtd:80,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
 ];
 
-function parseTime(t){const m=t.match(/(\d+)h(\d+)?/);return m?(+m[1])*60+(m[2]?+m[2]:0):0;}
-function renderSchedule(){
-  const host=document.getElementById("sched-list");
-  const days=[],idx={};
-  FIXTURES.forEach(f=>{ if(!(f.d in idx)){idx[f.d]=days.length;days.push({d:f.d,dow:f.dow,r:f.r,items:[]});} days[idx[f.d]].items.push(f); });
-  host.innerHTML=days.map(day=>{
-    const items=day.items.slice().sort((x,y)=>parseTime(x.t)-parseTime(y.t));
-    const rows=items.map(f=>{
-      const mine=(BETS[f.a]||BETS[f.b])?1:0;
-      // build bet tags
-      let betsHtml="";
-      [f.a,f.b].forEach(team=>{
-        const b=BETS[team];
-        if(!b) return;
-        Object.values(b).forEach(x=>{
-          const cls=fmtType(x.type);
-          betsHtml+=`<span class="fbet ${cls}"><span class="fm">${x.mults.join("·")}</span>${flag(team)} ${team} ${x.type}</span>`;
-        });
-      });
-      if(betsHtml) betsHtml=`<div class="fix-bets">${betsHtml}</div>`;
-      return `<div class="fix${mine?' mine':''}" data-r="${f.r}" data-g="${f.g}" data-mine="${mine}" data-d="${f.d}">`+
-        `<span class="ftime">${f.t}</span><span class="fg">${f.g}</span>`+
-        `<span class="fmatch">${flag(f.a)}<span class="nm">${f.a}</span><span class="fsep" data-ha="${f.a}" data-aw="${f.b}">×</span>${flag(f.b)}<span class="nm">${f.b}</span></span>`+
-        `<span class="fcity">${f.c}</span>${betsHtml}</div>`;
-    }).join("");
-    return `<div class="daygroup"><div class="dayhead"><span class="dn">${day.d}</span><span class="dw">${day.dow}</span><span class="dr">${day.r}ª rodada</span></div>${rows}</div>`;
-  }).join("");
-}
-const sState={r:"all",mine:false,today:false};
-function todayStr(){const d=new Date(),m=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];return d.getDate()+" "+m[d.getMonth()];}
-function applySched(){
-  const td=sState.today?todayStr():"";
-  document.querySelectorAll("#sched-list .fix").forEach(fx=>{
-    const ok=(sState.r==="all"||fx.dataset.r===sState.r)&&(!sState.mine||fx.dataset.mine==="1")&&(!sState.today||fx.dataset.d===td);
-    fx.style.display=ok?"":"none";
-  });
-  document.querySelectorAll("#sched-list .daygroup").forEach(dg=>{
-    dg.style.display=[...dg.querySelectorAll(".fix")].some(f=>f.style.display!=="none")?"":"none";
-  });
-  const noday=document.getElementById("no-today");
-  if(sState.today&&![...document.querySelectorAll("#sched-list .daygroup")].some(d=>d.style.display!=="none")){
-    if(!noday){const p=document.createElement("p");p.id="no-today";p.className="schedsum";p.style.color="var(--amber)";p.textContent="Nenhum jogo hoje ("+todayStr()+"). Os próximos são em "+nextGameDay()+".";document.getElementById("sched-list").prepend(p);}
-  }else if(noday){noday.remove();}
-}
-function nextGameDay(){const ds=[...new Set(FIXTURES.map(f=>f.d))],td=todayStr(),i=ds.findIndex(d=>{const a=parseInt(d),b=parseInt(td);return a>b;});return i>-1?ds[i]:"breve";}
+const processosConcluidos = [
+  {objeto:"Aquisição de Chás",avg:156.0,count:24},
+  {objeto:"Fornecimento de Açúcar Cristal",avg:176.6,count:5},
+  {objeto:"Copos Descartáveis",avg:178.2,count:8},
+  {objeto:"Material de Limpeza",avg:187.4,count:15},
+  {objeto:"Materiais de Copa",avg:217.7,count:72},
+  {objeto:"Fornecimento de Café Superior",avg:224.4,count:5},
+  {objeto:"Pilhas e Baterias e Suprimento CEAM",avg:258.7,count:38},
+  {objeto:"Mat. de Expediente - Emp. Simples",avg:268.0,count:5},
+  {objeto:"Material de Expediente - ATA RP",avg:298.9,count:74},
+];
 
-renderMult();
-renderMatches();
-renderGroups();
-renderSchedule();
+// ════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════
+const dd = (a,b)=>Math.round((a-b)/86400000);
+const fD = d=>d?d.toLocaleDateString("pt-BR"):"N/A";
+const fN = n=>n.toLocaleString("pt-BR");
+const fC = n=>n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 
-document.querySelectorAll(".filterbar .fbtn").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll(".filterbar .fbtn").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  document.querySelectorAll(".hl-btn").forEach(x=>x.classList.remove("on"));
-  setFilter(b.dataset.f);
+function statusBadge(days){
+  if(days<=0) return'<span class="badge badge-danger">RUPTURA</span>';
+  if(days<=30)return'<span class="badge badge-crit">CRÍTICO</span>';
+  if(days<=60)return'<span class="badge badge-warn">ALERTA</span>';
+  return'<span class="badge badge-ok">OK</span>';
+}
+function instrBadge(i){
+  if(i==="Contrato")return`<span class="badge badge-blue">${i}</span>`;
+  if(i==="Ata RP")  return`<span class="badge badge-green">${i}</span>`;
+  return`<span class="badge badge-purple">${i}</span>`;
+}
+
+// ── COMPUTED ──
+const estoqueComp = estoque.map(e=>({
+  ...e,
+  dias:dd(e.ruptura,TODAY),
+  vencExpired:e.vencimento&&e.vencimento<TODAY
 }));
 
-document.querySelectorAll("[data-sr]").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll("[data-sr]").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active"); sState.r=b.dataset.sr; applySched();
-}));
-document.getElementById("mine-toggle").addEventListener("click",function(){
-  sState.mine=!sState.mine; this.classList.toggle("active",sState.mine); applySched();
-});
-document.getElementById("today-toggle").addEventListener("click",function(){
-  sState.today=!sState.today; this.classList.toggle("active",sState.today); applySched();
-});
+const ruptura = estoqueComp.filter(e=>e.dias<=0).length;
+const critico = estoqueComp.filter(e=>e.dias>0&&e.dias<=30).length;
+const alerta  = estoqueComp.filter(e=>e.dias>30&&e.dias<=60).length;
+const ok      = estoqueComp.filter(e=>e.dias>60).length;
+const reqPend = requisicoes.filter(r=>r.situacao==="pendente");
+const reqEnt  = requisicoes.filter(r=>r.situacao==="entregue");
 
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  t.classList.add("active");
-  document.querySelectorAll(".tabpane").forEach(p=>{p.hidden=(p.id!==t.dataset.tab);});
-  window.scrollTo({top:0,behavior:"smooth"});
-}));
+// ════════════════════════════════════════════
+//  NAV
+// ════════════════════════════════════════════
+let currentTab='visao-geral';
+let currentFilter='todos';
 
-// ---- LIVE UPDATE via /api/scores (chave protegida no Vercel) ----
-let liveTimer, lastApiData=null;
-
-function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); }
-
-function setLiveStatus(type,msg){
-  const el=document.getElementById("live-status");
-  if(el){el.textContent=msg;el.className="live-status ls-"+type;}
-}
-
-function setRefreshSpin(on){
-  document.getElementById("refresh-btn")?.classList.toggle("spinning",on);
-}
-
-async function fetchLive(){
-  setRefreshSpin(true);
-  setLiveStatus("loading","⏳ Buscando placares...");
-  try{
-    const r=await fetch("/api/scores");
-    const ct=r.headers.get("content-type")||"";
-    if(!ct.includes("application/json")){
-      setLiveStatus("err","❌ API não encontrada — veja o guia de deploy no README.");
-      setRefreshSpin(false); return;
-    }
-    const data=await r.json();
-    if(!r.ok){
-      setLiveStatus("err","❌ Erro "+r.status+": "+(data.error||"verifique FOOTBALL_API_KEY no Vercel"));
-      setRefreshSpin(false); return;
-    }
-    lastApiData=data;
-    const total=(data.matches||[]).length;
-    const live=(data.matches||[]).filter(m=>["1H","2H","HT","ET"].includes(m.status)).length;
-    const ft=(data.matches||[]).filter(m=>["FT","AET","PEN"].includes(m.status)).length;
-    const t=new Date(data.updated).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-    setLiveStatus("ok","✅ "+t+" · "+total+" jogo(s) hoje"+(live?" · "+live+" ao vivo":"")+(ft?" · "+ft+" encerrado(s)":""));
-    if(data.matches) updateSchedule(data.matches);
-    if(data.standings) updateStandings(data.standings);
-  }catch(e){
-    setLiveStatus("err","❌ "+e.message);
-  }
-  setRefreshSpin(false);
-}
-
-function updateSchedule(matches){
-  const seps=document.querySelectorAll(".fsep");
-  matches.forEach(m=>{
-    seps.forEach(sep=>{
-      if(norm(sep.dataset.ha)===norm(m.home)&&norm(sep.dataset.aw)===norm(m.away)){
-        if(m.status==="NS") return;
-        sep.textContent=(m.score_home??"-")+" × "+(m.score_away??"-");
-        const fx=sep.closest(".fix"); if(!fx) return;
-        fx.classList.remove("live","ft");
-        const oldB=fx.querySelector(".livebadge"); if(oldB) oldB.remove();
-        const isLive=["1H","2H","ET"].includes(m.status), isHT=m.status==="HT", isFT=["FT","AET","PEN"].includes(m.status);
-        if(isLive||isHT){
-          fx.classList.add("live");
-          const b=document.createElement("span"); b.className="livebadge";
-          b.textContent=isHT?"INTERVALO":(m.minute?"AO VIVO "+m.minute+"'":"AO VIVO");
-          sep.after(b);
-        } else if(isFT) fx.classList.add("ft");
-      }
-    });
+function showTab(id,btn,bnavId){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  // sync bottom nav
+  const navId=bnavId||id;
+  document.querySelectorAll('.bnav-item').forEach(el=>{
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+navId+"'"))
+      el.classList.add('active');
   });
-}
-
-function updateStandings(standings){
-  Object.entries(standings).forEach(([g,teams])=>{
-    teams.sort((a,b)=>a.rank-b.rank);
-    const card=document.querySelector('.gcard[data-g="'+g+'"]'); if(!card) return;
-    teams.forEach(t=>{
-      card.querySelectorAll("tr[data-team]").forEach(row=>{
-        if(norm(row.dataset.team)===norm(t.team)){
-          const p=row.querySelector('[data-s="pts"]'),j=row.querySelector('[data-s="j"]'),s=row.querySelector('[data-s="sg"]');
-          if(p)p.textContent=t.pts; if(j)j.textContent=t.j;
-          if(s)s.textContent=t.sg>0?"+"+t.sg:t.sg;
-        }
-      });
-    });
-    const tbody=card.querySelector("tbody");
-    if(tbody){
-      const rows=[...tbody.querySelectorAll("tr")];
-      rows.sort((a,b)=>(teams.find(t=>norm(t.team)===norm(a.dataset.team))?.rank||99)-(teams.find(t=>norm(t.team)===norm(b.dataset.team))?.rank||99));
-      rows.forEach(r=>tbody.appendChild(r));
-    }
+  // sync top tabs
+  document.querySelectorAll('.tab').forEach(el=>{
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+id+"'"))
+      el.classList.add('active');
   });
+  currentTab=id;
 }
 
-document.getElementById("refresh-btn")?.addEventListener("click",fetchLive);
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEstoqueTable();
+}
 
-// auto-refresh a cada 90s
-fetchLive();
-setInterval(fetchLive,90000);
-document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden) fetchLive();
-});
+// ════════════════════════════════════════════
+//  RENDER FUNCTIONS
+// ════════════════════════════════════════════
+
+// ── HEADER ──
+function renderHeader(){
+  document.getElementById('header-meta').textContent=
+    `Atualizado em ${TODAY.toLocaleDateString('pt-BR')} · ${estoque.length} itens monitorados`;
+  const alertCount=ruptura+critico;
+  document.getElementById('header-badge').textContent=
+    alertCount>0?`⚠️ ${alertCount} alertas ativos`:'✅ Tudo monitorado';
+
+  // mobile badges
+  const eb=document.getElementById('mobile-badge-estoque');
+  const rb=document.getElementById('mobile-badge-req');
+  if(ruptura+critico>0){eb.textContent=ruptura+critico;eb.style.display='block'}
+  if(reqPend.length>0){rb.textContent=reqPend.length;rb.style.display='block'}
+
+  // update filter btn labels
+  document.getElementById('btn-ruptura').textContent=`Ruptura (${ruptura})`;
+  document.getElementById('btn-critico').textContent=`Crítico (${critico})`;
+  document.getElementById('btn-alerta').textContent=`Alerta (${alerta})`;
+  document.getElementById('btn-todos').textContent=`Todos (${estoque.length})`;
+}
+
+// ── ITENS EM DESTAQUE ──
+function renderHighlights(){
+  // Café Superior (cod 29405) e Papel A4 (cod 2078)
+  const destaques=[
+    {cod:29405,icon:"☕",label:"Café Superior"},
+    {cod:2078, icon:"📄",label:"Papel A4"},
+  ];
+  document.getElementById('highlight-grid').innerHTML=destaques.map(d=>{
+    const item=estoqueComp.find(e=>e.cod===d.cod);
+    if(!item) return '';
+    const corDias=item.dias<=0?'var(--danger)'
+                :item.dias<=30?'var(--crit)'
+                :item.dias<=60?'var(--warn)':'var(--ok)';
+    const corBorda=item.dias<=30?'var(--danger)':item.dias<=60?'var(--warn)':'var(--blue)';
+    const status=statusBadge(item.dias);
+    return`
+    <div class="highlight-card" style="border-left-color:${corBorda}">
+      <div class="hl-header">
+        <div class="hl-icon">${d.icon}</div>
+        <div style="flex:1">
+          <div class="hl-name">${d.label}</div>
+          <div class="hl-instr">${item.instrumento} · Cód. ${item.cod}</div>
+        </div>
+        ${status}
+      </div>
+      <div class="hl-metrics">
+        <div>
+          <div class="hl-metric-label">Saldo em estoque</div>
+          <div class="hl-metric-value" style="color:var(--text)">${fN(item.saldo)}</div>
+          <div class="hl-metric-sub">consumo médio: ${fN(item.consumo)}/mês</div>
+        </div>
+        <div>
+          <div class="hl-metric-label">Dias até ruptura</div>
+          <div class="hl-metric-value" style="color:${corDias}">${item.dias<=0?'0':item.dias}</div>
+          <div class="hl-metric-sub">ruptura em ${fD(item.ruptura)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── KPI ──
+function renderKPI(){
+  const cards=[
+    {label:"Em Ruptura",value:ruptura,color:"var(--danger)",bg:"var(--danger-bg)",icon:"⛔",sub:"estoque zerado agora",filter:"ruptura"},
+    {label:"Crítico ≤30 dias",value:critico,color:"var(--crit)",bg:"var(--crit-bg)",icon:"🔴",sub:"requer ação imediata",filter:"critico"},
+    {label:"Alerta 31–60 dias",value:alerta,color:"var(--warn)",bg:"var(--warn-bg)",icon:"🟡",sub:"monitorar de perto",filter:"alerta"},
+    {label:"Situação Normal",value:ok,color:"var(--ok)",bg:"var(--ok-bg)",icon:"✅",sub:"estoque adequado",filter:"todos"},
+  ];
+  document.getElementById('kpi-grid').innerHTML=cards.map(c=>`
+    <div class="kpi-card" style="border-left:4px solid ${c.color};background:${c.bg};cursor:pointer" onclick="goToEstoque('${c.filter}')">
+      <div class="kpi-icon">${c.icon}</div>
+      <div class="kpi-value" style="color:${c.color}">${c.value}</div>
+      <div class="kpi-label">${c.label}</div>
+      <div class="kpi-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+function goToEstoque(filter){
+  showTab('estoque',null,'estoque');
+  const btn=document.getElementById('btn-'+filter);
+  if(btn) setFilter(filter,btn);
+}
+
+// ── DONUT ──
+function renderDonut(){
+  const total=ruptura+critico+alerta+ok;
+  const segments=[
+    {val:ruptura,color:'#dc2626',label:'Ruptura'},
+    {val:critico,color:'#ea580c',label:'Crítico'},
+    {val:alerta,color:'#d97706',label:'Alerta'},
+    {val:ok,color:'#16a34a',label:'Normal'},
+  ];
+  const r=60,cx=70,cy=70,stroke=18;
+  const circ=2*Math.PI*r;
+  let offset=0;
+  let paths='';
+  segments.forEach(s=>{
+    const pct=s.val/total;
+    const dash=pct*circ;
+    paths+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="${stroke}"
+      stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-offset}" stroke-linecap="butt"
+      style="transition:stroke-dasharray .8s ease"/>`;
+    offset+=dash;
+  });
+  const legend=segments.map(s=>`
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${s.color}"></div>
+      <span class="legend-label">${s.label}</span>
+      <span class="legend-val">${s.val}</span>
+    </div>`).join('');
+  document.getElementById('donut-wrap').innerHTML=`
+    <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140" style="transform:rotate(-90deg)">
+      ${paths}
+      <text x="70" y="70" text-anchor="middle" dominant-baseline="central" font-size="22" font-weight="800" fill="#0f172a" style="transform:rotate(90deg);transform-origin:70px 70px">${total}</text>
+      <text x="70" y="88" text-anchor="middle" dominant-baseline="central" font-size="9" fill="#64748b" style="transform:rotate(90deg);transform-origin:70px 70px">itens</text>
+    </svg>
+    <div class="donut-legend">${legend}</div>`;
+}
+
+// ── CRITICOS ──
+function renderCriticos(){
+  const list=estoqueComp.filter(e=>e.dias<=30).sort((a,b)=>a.dias-b.dias);
+  document.getElementById('criticos-count').textContent=list.length+' itens';
+  document.getElementById('criticos-list').innerHTML=list.map(e=>`
+    <div class="crit-item">
+      <div>
+        <div class="crit-name">${e.nome}</div>
+        <div class="crit-sub">Saldo: ${fN(e.saldo)} · ${e.instrumento}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:12px">
+        ${statusBadge(e.dias)}
+        <div class="crit-days" style="color:${e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':'var(--warn)'};margin-top:4px">${e.dias<=0?'—':e.dias}</div>
+        <div class="crit-days-label">${e.dias<=0?'ruptura':'dias'}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── MINI STATS ──
+function renderMiniStats(){
+  const procsPend=[...new Set(reqPend.map(r=>r.processo))].length;
+  const memos=[...new Set(reqPend.map(r=>r.memo))].length;
+  const items=[
+    {label:"Pendentes",val:reqPend.length,color:"var(--crit)"},
+    {label:"Entregues",val:reqEnt.length,color:"var(--ok)"},
+    {label:"Processos pendentes",val:procsPend,color:"var(--blue)"},
+    {label:"Memos ativos",val:memos,color:"#7c3aed"},
+  ];
+  document.getElementById('mini-stats').innerHTML=items.map(m=>`
+    <div class="mini-stat">
+      <div class="mini-stat-val" style="color:${m.color}">${m.val}</div>
+      <div class="mini-stat-label">${m.label}</div>
+    </div>`).join('');
+  const procs=[...new Set(reqPend.map(r=>r.processo))];
+  document.getElementById('proc-pendentes-list').innerHTML=procs.map(p=>{
+    const its=reqPend.filter(r=>r.processo===p);
+    return`<div class="proc-item">
+      <div class="proc-num">${p}</div>
+      <div class="proc-meta">${its.length} item(s) · ${its[0].memo}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── BAR CHART ──
+function renderBarChart(){
+  const maxA=Math.max(...processosConcluidos.map(p=>p.avg));
+  const sorted=[...processosConcluidos].sort((a,b)=>a.avg-b.avg);
+  document.getElementById('bar-chart').innerHTML=sorted.map(p=>{
+    const pct=(p.avg/maxA*100).toFixed(1);
+    const color=p.avg>280?'var(--danger)':p.avg>200?'var(--crit)':'var(--ok)';
+    return`<div class="bar-row">
+      <div class="bar-header">
+        <span class="bar-label">${p.objeto}</span>
+        <span class="bar-value" style="color:${color}">${p.avg.toFixed(0)}d <span style="font-size:10px;font-weight:400;color:var(--muted)">(${p.count})</span></span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('info-box').innerHTML=
+    `💡 Mais ágil: <strong>Aquisição de Chás — 156 dias</strong> &nbsp;·&nbsp; Mais lento: <strong>Mat. Expediente ATA RP — 299 dias</strong> &nbsp;·&nbsp; Base: 244 processos`;
+}
+
+// ── ESTOQUE TABLE ──
+function renderEstoqueTable(){
+  const search=(document.getElementById('search-input').value||'').toLowerCase();
+  let data=estoqueComp;
+  if(currentFilter==='ruptura') data=data.filter(e=>e.dias<=0);
+  else if(currentFilter==='critico') data=data.filter(e=>e.dias>0&&e.dias<=30);
+  else if(currentFilter==='alerta')  data=data.filter(e=>e.dias>30&&e.dias<=60);
+  if(search) data=data.filter(e=>e.nome.toLowerCase().includes(search)||String(e.cod).includes(search));
+  data=[...data].sort((a,b)=>a.dias-b.dias);
+  document.getElementById('estoque-tbody').innerHTML=data.map(e=>`
+    <tr>
+      <td>${statusBadge(e.dias)}</td>
+      <td class="mono">${e.cod}</td>
+      <td style="font-weight:600;max-width:180px">${e.nome}</td>
+      <td style="text-align:right;font-weight:700;color:${e.saldo===0?'var(--danger)':'inherit'}">${fN(e.saldo)}</td>
+      <td style="text-align:right;color:var(--muted)">${fN(e.consumo)}</td>
+      <td style="color:${e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':'inherit'};font-size:12px">${fD(e.ruptura)}</td>
+      <td style="text-align:center;font-weight:800;color:${e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':e.dias<=60?'var(--warn)':'var(--ok)'}">${e.dias<=0?'—':e.dias}</td>
+      <td>${instrBadge(e.instrumento)}</td>
+      <td style="font-size:11px;color:${e.vencExpired?'var(--danger)':'inherit'}">
+        ${fD(e.vencimento)}${e.vencExpired?'<span class="vencido-tag">VENCIDO</span>':''}
+      </td>
+    </tr>`).join('');
+}
+
+// ── CONTRATOS TABLE ──
+function renderContratos(){
+  document.getElementById('contratos-count').textContent=contratos.length+' instrumentos';
+  document.getElementById('contratos-tbody').innerHTML=contratos.map(c=>{
+    const pct=c.qtdContratada>0?Math.round(c.qtdRequisitada/c.qtdContratada*100):0;
+    const color=pct>=90?'var(--danger)':pct>=60?'var(--warn)':'var(--ok)';
+    const valorTotal=c.qtdContratada*c.preco;
+    return`<tr>
+      <td style="font-size:11px;max-width:160px;font-weight:500">${c.instr}</td>
+      <td style="font-weight:600;max-width:160px">${c.nome}</td>
+      <td style="text-align:right">${fN(c.qtdContratada)}</td>
+      <td style="text-align:right">${fN(c.qtdRequisitada)}</td>
+      <td style="text-align:right;font-weight:700;color:${c.qtdRestante===0?'var(--danger)':'inherit'}">${fN(c.qtdRestante)}</td>
+      <td style="text-align:right;font-size:12px">${fC(c.preco)}</td>
+      <td style="text-align:right;font-size:12px">${fC(valorTotal)}</td>
+      <td style="min-width:120px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+          <span style="font-size:11px;font-weight:700;color:${color};min-width:28px">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── REQUISIÇÕES ──
+function renderRequisicoes(){
+  document.getElementById('req-pend-count').textContent=reqPend.length;
+  document.getElementById('req-ent-count').textContent=reqEnt.length;
+  document.getElementById('req-pendentes-tbody').innerHTML=reqPend.map(r=>`
+    <tr>
+      <td style="color:#7c3aed;font-weight:700;white-space:nowrap">${r.memo}</td>
+      <td style="max-width:140px">${r.nome}</td>
+      <td style="text-align:right;font-weight:700">${fN(r.qtd)}</td>
+      <td class="mono">${r.processo}</td>
+    </tr>`).join('');
+  document.getElementById('req-entregues-tbody').innerHTML=reqEnt.map(r=>`
+    <tr>
+      <td style="color:var(--ok);font-weight:700;white-space:nowrap">${r.memo}</td>
+      <td style="max-width:140px">${r.nome}</td>
+      <td style="text-align:right;font-weight:700">${fN(r.qtd)}</td>
+      <td class="mono">${r.pagamento||'—'}</td>
+    </tr>`).join('');
+}
+
+// ── TRAMITAÇÃO ──
+function renderTramitacao(){
+  const maxA=Math.max(...processosConcluidos.map(p=>p.avg));
+  const totalProc=processosConcluidos.reduce((a,b)=>a+b.count,0);
+  const media=(processosConcluidos.reduce((a,b)=>a+b.avg*b.count,0)/totalProc).toFixed(0);
+  document.getElementById('tram-total').textContent=`${totalProc} processos`;
+  const sorted=[...processosConcluidos].sort((a,b)=>a.avg-b.avg);
+  document.getElementById('tram-tbody').innerHTML=sorted.map(p=>{
+    const cat=p.avg<=180?{label:'Ágil',cls:'badge-ok',color:'var(--ok)'}
+             :p.avg<=250?{label:'Regular',cls:'badge-warn',color:'var(--warn)'}
+             :{label:'Lento',cls:'badge-danger',color:'var(--danger)'};
+    const pct=(p.avg/maxA*100).toFixed(1);
+    return`<tr>
+      <td style="font-weight:600">${p.objeto}</td>
+      <td style="text-align:center;color:var(--muted)">${p.count}</td>
+      <td style="text-align:center;font-weight:800;font-size:16px;color:${cat.color}">${p.avg.toFixed(0)}</td>
+      <td><span class="badge ${cat.cls}">${cat.label}</span></td>
+      <td style="min-width:140px">
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tram-summary').innerHTML=[
+    {icon:'📈',tag:'Média geral (244 processos)',val:`${media} dias`,color:'var(--blue)'},
+    {icon:'🚀',tag:'Processo mais ágil',val:'Aquisição de Chás · 156 dias',color:'var(--ok)'},
+    {icon:'🐢',tag:'Processo mais lento',val:'Material de Expediente ATA RP · 299 dias',color:'var(--danger)'},
+  ].map(s=>`
+    <div class="summary-card" style="border-top:3px solid ${s.color}">
+      <div class="s-icon">${s.icon}</div>
+      <div class="s-tag">${s.tag}</div>
+      <div class="s-val">${s.val}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+renderHeader();
+renderHighlights();
+renderKPI();
+renderDonut();
+renderCriticos();
+renderMiniStats();
+renderBarChart();
+renderEstoqueTable();
+renderContratos();
+renderRequisicoes();
+renderTramitacao();
 </script>
 </body>
 </html>
