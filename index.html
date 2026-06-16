@@ -486,61 +486,61 @@ tbody td{padding:10px 14px;vertical-align:middle}
 // ════════════════════════════════════════════
 //  DADOS
 // ════════════════════════════════════════════
-const TODAY = new Date("2026-05-28");
+const TODAY = new Date("2026-06-16");
 
 const estoque = [
-  {cod:16513,nome:"Açúcar",saldo:7300,consumo:3000,ruptura:new Date("2026-08-09"),instrumento:"Contrato",vencimento:new Date("2027-02-23")},
-  {cod:29405,nome:"Café Superior",saldo:29182,consumo:4500,ruptura:new Date("2026-12-08"),instrumento:"Emp. Simples",vencimento:null},
-  {cod:16077,nome:"Chá de Boldo",saldo:0,consumo:210,ruptura:new Date("2026-05-28"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:16075,nome:"Chá de Camomila",saldo:977,consumo:340,ruptura:new Date("2026-08-22"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:29145,nome:"Chá de Capim Cidreira",saldo:162,consumo:340,ruptura:new Date("2026-06-11"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:16073,nome:"Chá de Erva Doce",saldo:975,consumo:320,ruptura:new Date("2026-08-27"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:16076,nome:"Chá de Frutas Vermelhas",saldo:556,consumo:340,ruptura:new Date("2026-07-16"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:16074,nome:"Chá de Hortelã",saldo:1446,consumo:360,ruptura:new Date("2026-09-25"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
-  {cod:7303,nome:"Copo Água",saldo:8741,consumo:4000,ruptura:new Date("2026-08-01"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:7304,nome:"Copo Café",saldo:4963,consumo:1050,ruptura:new Date("2026-10-16"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:5859,nome:"Flanela Branca",saldo:1111,consumo:240,ruptura:new Date("2026-10-13"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:17801,nome:"Detergente",saldo:5471,consumo:950,ruptura:new Date("2026-11-16"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:5797,nome:"Sabão de Coco",saldo:3307,consumo:680,ruptura:new Date("2026-10-20"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:5795,nome:"Água Sanitária",saldo:667,consumo:195,ruptura:new Date("2026-09-07"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:5861,nome:"Esponja",saldo:2265,consumo:500,ruptura:new Date("2026-10-10"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:7420,nome:"Jarra para Água (CAEDI)",saldo:225,consumo:1,ruptura:new Date("2044-11-19"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:14896,nome:"Pilha Alcalina AAA",saldo:32,consumo:61,ruptura:new Date("2026-06-12"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
-  {cod:5359,nome:"Pilha Média",saldo:46,consumo:12,ruptura:new Date("2026-09-20"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
-  {cod:5342,nome:"Pilha Pequena AA",saldo:252,consumo:140,ruptura:new Date("2026-07-21"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
-  {cod:2078,nome:"Papel A4",saldo:2391,consumo:950,ruptura:new Date("2026-08-11"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:28422,nome:"Pendrive 32 GB",saldo:34,consumo:60,ruptura:new Date("2026-06-14"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:1714,nome:"Caneta Esferográfica Azul",saldo:1713,consumo:900,ruptura:new Date("2026-07-24"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:1795,nome:"Cola em Bastão",saldo:173,consumo:90,ruptura:new Date("2026-07-24"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:1800,nome:"Cola Plástica",saldo:0,consumo:40,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:1901,nome:"Corretivo Líquido",saldo:50,consumo:20,ruptura:new Date("2026-08-11"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:2053,nome:"Fita Adesiva Transparente",saldo:192,consumo:40,ruptura:new Date("2026-10-19"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:30414,nome:"Pincel Atômico Preto",saldo:13,consumo:10,ruptura:new Date("2026-07-06"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:25298,nome:"Pincel Atômico Azul",saldo:33,consumo:10,ruptura:new Date("2026-09-04"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:25299,nome:"Pincel Atômico Vermelho",saldo:35,consumo:8,ruptura:new Date("2026-10-06"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:30381,nome:"Pincel Quadro Magnético Azul",saldo:35,consumo:10,ruptura:new Date("2026-09-10"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:30382,nome:"Pincel Quadro Magnético Preto",saldo:30,consumo:10,ruptura:new Date("2026-08-26"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:30383,nome:"Pincel Quadro Magnético Vermelho",saldo:7,consumo:10,ruptura:new Date("2026-06-18"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:2453,nome:"Fita para Empacotamento",saldo:1365,consumo:283,ruptura:new Date("2026-10-19"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:2241,nome:"Envelope Ofício Câmara 114x229mm",saldo:1,consumo:5,ruptura:new Date("2026-06-03"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
-  {cod:2236,nome:"Envelope Separata Branco 176x250mm",saldo:10720,consumo:2000,ruptura:new Date("2026-11-04"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
-  {cod:13671,nome:"Plástico Transparente Bolha",saldo:0,consumo:1,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2027-03-24")},
-  {cod:18085,nome:"Etiqueta 138,11x106,36mm",saldo:1553,consumo:100,ruptura:new Date("2027-09-05"),instrumento:"Ata RP",vencimento:new Date("2020-10-16")},
-  {cod:5851,nome:"Lã de Aço Bombril",saldo:1089,consumo:200,ruptura:new Date("2026-11-07"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:7464,nome:"Garrafa Térmica",saldo:78,consumo:50,ruptura:new Date("2026-07-13"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:7496,nome:"Pano de Prato",saldo:951,consumo:240,ruptura:new Date("2026-09-23"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:17330,nome:"Caixa Arquivo 100mm x 260mm",saldo:1200,consumo:220,ruptura:new Date("2026-11-07"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:2448,nome:"Caixa Arquivo 110mm x 280mm",saldo:600,consumo:100,ruptura:new Date("2026-11-24"),instrumento:"Ata RP",vencimento:new Date("2024-07-18")},
-  {cod:1816,nome:"Capa para Avulso",saldo:7303,consumo:276,ruptura:new Date("2028-07-29"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
-  {cod:1817,nome:"Capa para Processo",saldo:80,consumo:25,ruptura:new Date("2026-09-01"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
-  {cod:2240,nome:"Envelope Carta Câmara",saldo:1091,consumo:10,ruptura:new Date("2035-05-14"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
-  {cod:27762,nome:"Envelope Grande Kraft c/ Timbre",saldo:0,consumo:190,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
-  {cod:16462,nome:"Pasta Polipropileno c/ Aba e Elástico",saldo:1306,consumo:65,ruptura:new Date("2028-01-20"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
-  {cod:2253,nome:"Envelope Kraft 80x116mm Votação",saldo:1825,consumo:20,ruptura:new Date("2033-11-24"),instrumento:"Emp. Simples",vencimento:null},
-  {cod:2237,nome:"Envelope Kraft para Documento c/ Timbre",saldo:0,consumo:1700,ruptura:new Date("2026-05-28"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
-  {cod:1834,nome:"Pasta Suspensa para Arquivo",saldo:138,consumo:15,ruptura:new Date("2027-02-28"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
-  {cod:7495,nome:"Coador Pequeno",saldo:273,consumo:40,ruptura:new Date("2026-12-18"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
-  {cod:7503,nome:"Coador Grande",saldo:158,consumo:25,ruptura:new Date("2026-12-03"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:16513,nome:"Açúcar",saldo:5380,consumo:3000,ruptura:new Date("2026-08-08"),instrumento:"Contrato",vencimento:new Date("2027-02-23")},
+  {cod:29405,nome:"Café Superior",saldo:26984,consumo:4300,ruptura:new Date("2026-12-21"),instrumento:"Emp. Simples",vencimento:null},
+  {cod:16077,nome:"Chá de Boldo",saldo:0,consumo:170,ruptura:new Date("2026-06-16"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16075,nome:"Chá de Camomila",saldo:759,consumo:330,ruptura:new Date("2026-08-24"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:29145,nome:"Chá de Capim Cidreira",saldo:0,consumo:264,ruptura:new Date("2026-06-16"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16073,nome:"Chá de Erva Doce",saldo:746,consumo:310,ruptura:new Date("2026-08-27"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16076,nome:"Chá de Frutas Vermelhas",saldo:336,consumo:317,ruptura:new Date("2026-07-17"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:16074,nome:"Chá de Hortelã",saldo:1209,consumo:320,ruptura:new Date("2026-10-07"),instrumento:"Contrato",vencimento:new Date("2026-09-03")},
+  {cod:7303,nome:"Copo Água",saldo:6446,consumo:3800,ruptura:new Date("2026-08-05"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7304,nome:"Copo Café",saldo:4240,consumo:950,ruptura:new Date("2026-10-27"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5859,nome:"Flanela Branca",saldo:941,consumo:240,ruptura:new Date("2026-10-11"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:17801,nome:"Detergente",saldo:4813,consumo:950,ruptura:new Date("2026-11-14"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5797,nome:"Sabão de Coco",saldo:2887,consumo:680,ruptura:new Date("2026-10-21"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5795,nome:"Água Sanitária",saldo:525,consumo:180,ruptura:new Date("2026-09-11"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:5861,nome:"Esponja",saldo:1914,consumo:500,ruptura:new Date("2026-10-08"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7420,nome:"Jarra para Água (CAEDI)",saldo:225,consumo:1,ruptura:new Date("2044-12-08"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:14896,nome:"Pilha Alcalina AAA",saldo:0,consumo:61,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:5359,nome:"Pilha Média",saldo:45,consumo:12,ruptura:new Date("2026-10-06"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:5342,nome:"Pilha Pequena AA",saldo:208,consumo:140,ruptura:new Date("2026-07-30"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
+  {cod:2078,nome:"Papel A4",saldo:1963,consumo:950,ruptura:new Date("2026-08-16"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:28422,nome:"Pendrive 32 GB",saldo:19,consumo:60,ruptura:new Date("2026-06-25"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1714,nome:"Caneta Esferográfica Azul",saldo:905,consumo:900,ruptura:new Date("2026-07-16"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1795,nome:"Cola em Bastão",saldo:156,consumo:90,ruptura:new Date("2026-08-07"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1800,nome:"Cola Plástica",saldo:0,consumo:40,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:1901,nome:"Corretivo Líquido",saldo:42,consumo:20,ruptura:new Date("2026-08-18"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2053,nome:"Fita Adesiva Transparente",saldo:182,consumo:40,ruptura:new Date("2026-10-30"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30414,nome:"Pincel Atômico Preto",saldo:4,consumo:10,ruptura:new Date("2026-06-28"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:25298,nome:"Pincel Atômico Azul",saldo:28,consumo:10,ruptura:new Date("2026-09-08"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:25299,nome:"Pincel Atômico Vermelho",saldo:30,consumo:8,ruptura:new Date("2026-10-06"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30381,nome:"Pincel Quadro Magnético Azul",saldo:35,consumo:10,ruptura:new Date("2026-09-29"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30382,nome:"Pincel Quadro Magnético Preto",saldo:30,consumo:10,ruptura:new Date("2026-09-14"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:30383,nome:"Pincel Quadro Magnético Vermelho",saldo:7,consumo:10,ruptura:new Date("2026-07-07"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2453,nome:"Fita para Empacotamento",saldo:1289,consumo:283,ruptura:new Date("2026-10-30"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2241,nome:"Envelope Ofício Câmara 114x229mm",saldo:1,consumo:5,ruptura:new Date("2026-06-22"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
+  {cod:2236,nome:"Envelope Separata Branco 176x250mm",saldo:10520,consumo:2000,ruptura:new Date("2026-11-20"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:13671,nome:"Plástico Transparente Bolha",saldo:0,consumo:1,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2027-03-24")},
+  {cod:18085,nome:"Etiqueta 138,11x106,36mm",saldo:1453,consumo:100,ruptura:new Date("2027-08-25"),instrumento:"Ata RP",vencimento:new Date("2020-10-16")},
+  {cod:5851,nome:"Lã de Aço Bombril",saldo:975,consumo:200,ruptura:new Date("2026-11-09"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7464,nome:"Garrafa Térmica",saldo:22,consumo:50,ruptura:new Date("2026-06-29"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7496,nome:"Pano de Prato",saldo:767,consumo:240,ruptura:new Date("2026-09-19"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:17330,nome:"Caixa Arquivo 100mm x 260mm",saldo:1200,consumo:220,ruptura:new Date("2026-11-26"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2448,nome:"Caixa Arquivo 110mm x 280mm",saldo:600,consumo:100,ruptura:new Date("2026-12-13"),instrumento:"Ata RP",vencimento:new Date("2024-07-18")},
+  {cod:1816,nome:"Capa para Avulso",saldo:7023,consumo:276,ruptura:new Date("2028-07-18"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:1817,nome:"Capa para Processo",saldo:70,consumo:25,ruptura:new Date("2026-09-08"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:2240,nome:"Envelope Carta Câmara",saldo:1091,consumo:10,ruptura:new Date("2035-06-02"),instrumento:"Ata RP",vencimento:new Date("2021-12-15")},
+  {cod:27762,nome:"Envelope Grande Kraft c/ Timbre",saldo:0,consumo:190,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
+  {cod:16462,nome:"Pasta Polipropileno c/ Aba e Elástico",saldo:1293,consumo:65,ruptura:new Date("2028-02-02"),instrumento:"Ata RP",vencimento:new Date("2020-06-25")},
+  {cod:2253,nome:"Envelope Kraft 80x116mm Votação",saldo:1815,consumo:20,ruptura:new Date("2033-11-28"),instrumento:"Emp. Simples",vencimento:null},
+  {cod:2237,nome:"Envelope Kraft para Documento c/ Timbre",saldo:0,consumo:1700,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2021-12-13")},
+  {cod:1834,nome:"Pasta Suspensa para Arquivo",saldo:138,consumo:15,ruptura:new Date("2027-03-19"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:7495,nome:"Coador Pequeno",saldo:259,consumo:40,ruptura:new Date("2026-12-27"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
+  {cod:7503,nome:"Coador Grande",saldo:150,consumo:25,ruptura:new Date("2026-12-13"),instrumento:"Contrato",vencimento:new Date("2027-01-01")},
 ];
 
 const contratos = [
@@ -635,8 +635,8 @@ const processosConcluidos = [
   {objeto:"Materiais de Copa",avg:217.7,count:72},
   {objeto:"Fornecimento de Café Superior",avg:224.4,count:5},
   {objeto:"Pilhas e Baterias e Suprimento CEAM",avg:258.7,count:38},
-  {objeto:"Mat. de Expediente - Emp. Simples",avg:268.0,count:5},
-  {objeto:"Material de Expediente - ATA RP",avg:298.9,count:74},
+  {objeto:"Mat. Expediente - Emp. Simples",avg:268.0,count:5},
+  {objeto:"Material de Expediente - ATA RP",avg:300.0,count:72},
 ];
 
 // ════════════════════════════════════════════
@@ -890,7 +890,7 @@ function renderBarChart(){
     </div>`;
   }).join('');
   document.getElementById('info-box').innerHTML=
-    `💡 Mais ágil: <strong>Aquisição de Chás — 156 dias</strong> &nbsp;·&nbsp; Mais lento: <strong>Mat. Expediente ATA RP — 299 dias</strong> &nbsp;·&nbsp; Base: 244 processos`;
+    `💡 Mais ágil: <strong>Aquisição de Chás — 156 dias</strong> &nbsp;·&nbsp; Mais lento: <strong>Mat. Expediente ATA RP — 300 dias</strong> &nbsp;·&nbsp; Base: 244 processos`;
 }
 
 // ── ESTOQUE TABLE ──
@@ -988,7 +988,7 @@ function renderTramitacao(){
   document.getElementById('tram-summary').innerHTML=[
     {icon:'📈',tag:'Média geral (244 processos)',val:`${media} dias`,color:'var(--blue)'},
     {icon:'🚀',tag:'Processo mais ágil',val:'Aquisição de Chás · 156 dias',color:'var(--ok)'},
-    {icon:'🐢',tag:'Processo mais lento',val:'Material de Expediente ATA RP · 299 dias',color:'var(--danger)'},
+    {icon:'🐢',tag:'Processo mais lento',val:'Material de Expediente ATA RP · 300 dias',color:'var(--danger)'},
   ].map(s=>`
     <div class="summary-card" style="border-top:3px solid ${s.color}">
       <div class="s-icon">${s.icon}</div>
