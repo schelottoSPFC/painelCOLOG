@@ -245,7 +245,82 @@ tbody td{padding:10px 14px;vertical-align:middle}
 .spark-bar-wrap{width:100px;flex-shrink:0}
 .spark-val{font-size:12px;font-weight:700;min-width:50px;text-align:right}
 
-/* ── SCROLL PADDING (mobile nav) ── */
+/* ── EXPANDABLE CONTRACT CARDS ── */
+.instr-group{margin-bottom:16px}
+.instr-group-header{
+  font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:8px;
+}
+.exp-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:8px;overflow:hidden;transition:box-shadow .15s;
+}
+.exp-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.exp-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.exp-header:active{background:var(--light)}
+.exp-left{flex:1;min-width:0}
+.exp-name{font-size:13px;font-weight:700;color:var(--text)}
+.exp-sub{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.exp-pct{font-size:13px;font-weight:800}
+.exp-chevron{font-size:16px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.exp-card.open .exp-chevron{transform:rotate(180deg)}
+.exp-body{
+  display:none;padding:12px 14px;border-top:1px solid var(--border);
+  background:var(--light);
+}
+.exp-card.open .exp-body{display:block}
+.exp-metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+.exp-metric label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:3px;font-weight:600}
+.exp-metric span{font-size:14px;font-weight:700;color:var(--text)}
+.exp-bar-wrap{margin-top:4px}
+.exp-bar-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+.exp-bar-label span{color:var(--muted)}
+.exp-bar-label strong{font-weight:700}
+.exp-track{background:var(--border);border-radius:4px;height:8px;overflow:hidden}
+.exp-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.exp-zero{font-size:11px;color:var(--danger);font-weight:700;margin-top:6px}
+
+/* ── REQ SUB-TABS ── */
+.req-tabs{
+  display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;gap:0;
+}
+.req-tab{
+  padding:10px 20px;border:none;background:none;cursor:pointer;font-size:13px;
+  font-weight:600;color:var(--muted);font-family:'Inter',sans-serif;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;
+  display:flex;align-items:center;gap:6px;-webkit-tap-highlight-color:transparent;
+}
+.req-tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.req-tab-badge{
+  font-size:10px;font-weight:800;padding:1px 6px;border-radius:10px;
+  background:var(--crit-bg);color:var(--crit);min-width:18px;text-align:center;
+}
+.req-tab-badge-ok{background:var(--ok-bg)!important;color:var(--ok)!important}
+
+/* ── REQ CARDS ── */
+.req-process-group{margin-bottom:16px}
+.req-process-label{
+  font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.req-process-num{font-family:'JetBrains Mono',monospace;color:var(--blue);font-size:11px;font-weight:700}
+.req-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin-bottom:8px;
+}
+.req-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.req-card-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.req-card-memo{font-size:11px;color:var(--muted);margin-top:2px}
+.req-card-qty{font-size:20px;font-weight:800;color:var(--text);text-align:right;line-height:1;flex-shrink:0}
+.req-card-qty-label{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
+.req-card-footer{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid var(--border)}
+.req-card-proc{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--blue);font-weight:700;flex:1}
+.req-card-pagto{font-size:11px;color:var(--muted);text-align:right}
 @media(max-width:768px){
   body{padding-bottom:70px}
   .bottom-nav{display:block}
@@ -371,57 +446,26 @@ tbody td{padding:10px 14px;vertical-align:middle}
   </div>
 
   <!-- ── CONTRATOS ── -->
+  <!-- ── CONTRATOS ── -->
   <div id="contratos" class="tab-content">
-    <div class="card" style="margin-bottom:16px">
-      <div class="card-header">
-        <span class="card-title">📄 Contratos e Atas Vigentes — Saldo de Qtde</span>
-        <span class="card-badge badge badge-green" id="contratos-count"></span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>Instrumento</th><th>Material</th>
-            <th style="text-align:right">Qtde Contratada</th>
-            <th style="text-align:right">Qtde Requisitada</th>
-            <th style="text-align:right">Qtde Restante</th>
-            <th style="text-align:right">Preço Unit.</th>
-            <th style="text-align:right">Valor Total</th>
-            <th>Consumo %</th>
-          </tr></thead>
-          <tbody id="contratos-tbody"></tbody>
-        </table>
-      </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <span class="card-title" style="margin:0">📄 Contratos e Atas Vigentes</span>
+      <span class="badge badge-green" id="contratos-count"></span>
     </div>
+    <div id="contratos-grupos"></div>
   </div>
 
   <!-- ── REQUISIÇÕES ── -->
   <div id="requisicoes" class="tab-content">
-    <div class="two-col">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">⏳ Pendentes</span>
-          <span class="card-badge badge badge-crit" id="req-pend-count"></span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Memo</th><th>Material</th><th style="text-align:right">Qtd</th><th>Processo</th></tr></thead>
-            <tbody id="req-pendentes-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">✅ Entregues</span>
-          <span class="card-badge badge badge-ok" id="req-ent-count"></span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Memo</th><th>Material</th><th style="text-align:right">Qtd</th><th>Proc. Pagto.</th></tr></thead>
-            <tbody id="req-entregues-tbody"></tbody>
-          </table>
-        </div>
-      </div>
+    <div class="req-tabs">
+      <button class="req-tab active" id="req-tab-pend" onclick="switchReqTab('pendente')">
+        Pendentes <span class="req-tab-badge" id="req-badge-pend"></span>
+      </button>
+      <button class="req-tab" id="req-tab-ent" onclick="switchReqTab('entregue')">
+        Entregues <span class="req-tab-badge req-tab-badge-ok" id="req-badge-ent"></span>
+      </button>
     </div>
+    <div id="req-cards"></div>
   </div>
 
   <!-- ── TRAMITAÇÃO ── -->
@@ -918,49 +962,143 @@ function renderEstoqueTable(){
     </tr>`).join('');
 }
 
-// ── CONTRATOS TABLE ──
+// ── CONTRATOS — cards expansíveis agrupados por instrumento ──
 function renderContratos(){
-  document.getElementById('contratos-count').textContent=contratos.length+' instrumentos';
-  document.getElementById('contratos-tbody').innerHTML=contratos.map(c=>{
-    const pct=c.qtdContratada>0?Math.round(c.qtdRequisitada/c.qtdContratada*100):0;
-    const color=pct>=90?'var(--danger)':pct>=60?'var(--warn)':'var(--ok)';
-    const valorTotal=c.qtdContratada*c.preco;
-    return`<tr>
-      <td style="font-size:11px;max-width:160px;font-weight:500">${c.instr}</td>
-      <td style="font-weight:600;max-width:160px">${c.nome}</td>
-      <td style="text-align:right">${fN(c.qtdContratada)}</td>
-      <td style="text-align:right">${fN(c.qtdRequisitada)}</td>
-      <td style="text-align:right;font-weight:700;color:${c.qtdRestante===0?'var(--danger)':'inherit'}">${fN(c.qtdRestante)}</td>
-      <td style="text-align:right;font-size:12px">${fC(c.preco)}</td>
-      <td style="text-align:right;font-size:12px">${fC(valorTotal)}</td>
-      <td style="min-width:120px">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
-          <span style="font-size:11px;font-weight:700;color:${color};min-width:28px">${pct}%</span>
+  const totalInstr=[...new Set(contratos.map(c=>c.instr))].length;
+  document.getElementById('contratos-count').textContent=`${contratos.length} itens · ${totalInstr} instrumentos`;
+
+  // Agrupar por instrumento
+  const grupos={};
+  contratos.forEach(c=>{
+    if(!grupos[c.instr]) grupos[c.instr]=[];
+    grupos[c.instr].push(c);
+  });
+
+  document.getElementById('contratos-grupos').innerHTML=Object.entries(grupos).map(([instr,itens])=>{
+    const cards=itens.map(c=>{
+      const pct=c.qtdContratada>0?Math.round(c.qtdRequisitada/c.qtdContratada*100):0;
+      const cor=pct>=90?'var(--danger)':pct>=60?'var(--warn)':'var(--ok)';
+      const corTexto=pct>=90?'var(--danger)':pct>=60?'var(--warn)':'var(--ok)';
+      const valorTotal=c.qtdContratada*c.preco;
+      const zero=c.qtdRestante===0?`<div class="exp-zero">⚠️ Cota esgotada</div>`:'';
+      return`
+      <div class="exp-card" onclick="toggleExpCard(this)">
+        <div class="exp-header">
+          <div class="exp-left">
+            <div class="exp-name">${c.nome}</div>
+            <div class="exp-sub">R$ ${c.preco.toFixed(2)}/un · Total: ${fC(valorTotal)}</div>
+          </div>
+          <div class="exp-right">
+            <span class="exp-pct" style="color:${corTexto}">${pct}%</span>
+            <svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
         </div>
-      </td>
-    </tr>`;
+        <div class="exp-body">
+          <div class="exp-metrics">
+            <div class="exp-metric">
+              <label>Qtde contratada</label>
+              <span>${fN(c.qtdContratada)}</span>
+            </div>
+            <div class="exp-metric">
+              <label>Qtde requisitada</label>
+              <span>${fN(c.qtdRequisitada)}</span>
+            </div>
+            <div class="exp-metric">
+              <label>Qtde restante</label>
+              <span style="color:${c.qtdRestante===0?'var(--danger)':'inherit'}">${fN(c.qtdRestante)}</span>
+            </div>
+            <div class="exp-metric">
+              <label>Preço unitário</label>
+              <span>${fC(c.preco)}</span>
+            </div>
+          </div>
+          <div class="exp-bar-wrap">
+            <div class="exp-bar-label">
+              <span>Consumo da cota</span>
+              <strong style="color:${corTexto}">${pct}%</strong>
+            </div>
+            <div class="exp-track"><div class="exp-fill" style="width:${pct}%;background:${cor}"></div></div>
+          </div>
+          ${zero}
+        </div>
+      </div>`;
+    }).join('');
+
+    return`<div class="instr-group">
+      <div class="instr-group-header">${instr}</div>
+      ${cards}
+    </div>`;
   }).join('');
 }
 
-// ── REQUISIÇÕES ──
+function toggleExpCard(card){
+  card.classList.toggle('open');
+}
+
+// ── REQUISIÇÕES — sub-abas + cards agrupados por processo ──
+let reqTabAtiva='pendente';
+
+function switchReqTab(tab){
+  reqTabAtiva=tab;
+  document.getElementById('req-tab-pend').classList.toggle('active',tab==='pendente');
+  document.getElementById('req-tab-ent').classList.toggle('active',tab==='entregue');
+  renderReqCards();
+}
+
 function renderRequisicoes(){
-  document.getElementById('req-pend-count').textContent=reqPend.length;
-  document.getElementById('req-ent-count').textContent=reqEnt.length;
-  document.getElementById('req-pendentes-tbody').innerHTML=reqPend.map(r=>`
-    <tr>
-      <td style="color:#7c3aed;font-weight:700;white-space:nowrap">${r.memo}</td>
-      <td style="max-width:140px">${r.nome}</td>
-      <td style="text-align:right;font-weight:700">${fN(r.qtd)}</td>
-      <td class="mono">${r.processo}</td>
-    </tr>`).join('');
-  document.getElementById('req-entregues-tbody').innerHTML=reqEnt.map(r=>`
-    <tr>
-      <td style="color:var(--ok);font-weight:700;white-space:nowrap">${r.memo}</td>
-      <td style="max-width:140px">${r.nome}</td>
-      <td style="text-align:right;font-weight:700">${fN(r.qtd)}</td>
-      <td class="mono">${r.pagamento||'—'}</td>
-    </tr>`).join('');
+  document.getElementById('req-badge-pend').textContent=reqPend.length;
+  document.getElementById('req-badge-ent').textContent=reqEnt.length;
+  renderReqCards();
+}
+
+function renderReqCards(){
+  const lista=reqTabAtiva==='pendente'?reqPend:reqEnt;
+  const isPend=reqTabAtiva==='pendente';
+
+  // Agrupar por processo
+  const grupos={};
+  lista.forEach(r=>{
+    const key=r.processo;
+    if(!grupos[key]) grupos[key]={memo:r.memo,processo:r.processo,pagamento:r.pagamento,itens:[]};
+    grupos[key].itens.push(r);
+  });
+
+  document.getElementById('req-cards').innerHTML=Object.values(grupos).map(g=>{
+    // Calcular total de itens e qtd total do processo
+    const totalQtd=g.itens.reduce((s,r)=>s+r.qtd,0);
+    const totalItens=g.itens.length;
+
+    const cards=g.itens.map(r=>`
+      <div class="req-card">
+        <div class="req-card-top">
+          <div>
+            <div class="req-card-name">${r.nome}</div>
+            <div class="req-card-memo">${r.memo}</div>
+          </div>
+          <div>
+            <div class="req-card-qty">${fN(r.qtd)}</div>
+            <div class="req-card-qty-label">unidades</div>
+          </div>
+        </div>
+        <div class="req-card-footer">
+          <span class="req-card-proc">${r.processo}</span>
+          ${!isPend&&r.pagamento?`<span class="req-card-pagto">Pagto: ${r.pagamento}</span>`:''}
+        </div>
+      </div>`).join('');
+
+    const labelTipo=isPend?'Pendente':'Entregue';
+    const corLabel=isPend?'var(--crit)':'var(--ok)';
+    return`<div class="req-process-group">
+      <div class="req-process-label">
+        <div>
+          <span class="req-process-num">${g.processo}</span>
+          <span style="font-size:11px;color:var(--muted);margin-left:8px">${g.memo} · ${totalItens} iten(s)</span>
+        </div>
+        <span class="badge" style="background:${isPend?'var(--crit-bg)':'var(--ok-bg)'};color:${corLabel}">${labelTipo}</span>
+      </div>
+      ${cards}
+    </div>`;
+  }).join('');
 }
 
 // ── TRAMITAÇÃO ──
