@@ -443,6 +443,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
       <button class="filter-btn" id="btn-ruptura" onclick="setFilter('ruptura',this)">Ruptura</button>
       <button class="filter-btn" id="btn-critico" onclick="setFilter('critico',this)">Crítico</button>
       <button class="filter-btn" id="btn-alerta"  onclick="setFilter('alerta',this)">Alerta</button>
+      <button class="filter-btn" id="btn-ok"      onclick="setFilter('ok',this)">OK</button>
     </div>
     <div class="card" style="padding:0;overflow:hidden">
       <div class="table-wrap">
@@ -789,6 +790,7 @@ function renderHeader(){
   document.getElementById('btn-ruptura').textContent=`Ruptura (${ruptura})`;
   document.getElementById('btn-critico').textContent=`Crítico (${critico})`;
   document.getElementById('btn-alerta').textContent=`Alerta (${alerta})`;
+  document.getElementById('btn-ok').textContent=`OK (${ok})`;
   document.getElementById('btn-todos').textContent=`Todos (${estoque.length})`;
 }
 
@@ -961,6 +963,7 @@ function renderEstoqueTable(){
   if(currentFilter==='ruptura') data=data.filter(e=>e.dias<=0);
   else if(currentFilter==='critico') data=data.filter(e=>e.dias>0&&e.dias<=30);
   else if(currentFilter==='alerta')  data=data.filter(e=>e.dias>30&&e.dias<=60);
+  else if(currentFilter==='ok')      data=data.filter(e=>e.dias>60);
   if(search) data=data.filter(e=>e.nome.toLowerCase().includes(search)||String(e.cod).includes(search));
   data=[...data].sort((a,b)=>a.dias-b.dias);
   document.getElementById('estoque-tbody').innerHTML=data.map(e=>`
