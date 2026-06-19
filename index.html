@@ -317,6 +317,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
   background:var(--crit-bg);color:var(--crit);min-width:18px;text-align:center;
 }
 .req-tab-badge-ok{background:var(--ok-bg)!important;color:var(--ok)!important}
+.req-tab-badge-warn{background:var(--crit-bg)!important;color:var(--crit)!important}
 
 /* ── REQ CARDS ── */
 .req-process-group{margin-bottom:16px}
@@ -481,6 +482,9 @@ tbody td{padding:10px 14px;vertical-align:middle}
       </button>
       <button class="req-tab" id="req-tab-ent" onclick="switchReqTab('entregue')">
         Entregues <span class="req-tab-badge req-tab-badge-ok" id="req-badge-ent"></span>
+      </button>
+      <button class="req-tab" id="req-tab-arequis" onclick="switchReqTab('arequisitar')">
+        A Requisitar <span class="req-tab-badge req-tab-badge-warn" id="req-badge-arequis"></span>
       </button>
     </div>
     <div id="req-cards"></div>
@@ -784,7 +788,8 @@ function renderHeader(){
   const eb=document.getElementById('mobile-badge-estoque');
   const rb=document.getElementById('mobile-badge-req');
   if(ruptura+critico>0){eb.textContent=ruptura+critico;eb.style.display='block'}
-  if(reqPend.length>0){rb.textContent=reqPend.length;rb.style.display='block'}
+  const aRequisitarCount=getItensARequisitar().length;
+  if(aRequisitarCount>0){rb.textContent=aRequisitarCount;rb.style.display='block'}
 
   // update filter btn labels
   document.getElementById('btn-ruptura').textContent=`Ruptura (${ruptura})`;
@@ -1083,20 +1088,35 @@ function toggleExpCard(card){
 // ── REQUISIÇÕES — sub-abas + cards agrupados por processo ──
 let reqTabAtiva='pendente';
 
+// Itens em ruptura/crítico/alerta que NÃO estão em nenhuma requisição pendente
+function getItensARequisitar(){
+  const codsPendentes=new Set(reqPend.map(r=>r.cod));
+  return estoqueComp
+    .filter(e=>e.dias<=60) // ruptura, crítico ou alerta
+    .filter(e=>!codsPendentes.has(e.cod))
+    .sort((a,b)=>a.dias-b.dias);
+}
+
 function switchReqTab(tab){
   reqTabAtiva=tab;
   document.getElementById('req-tab-pend').classList.toggle('active',tab==='pendente');
   document.getElementById('req-tab-ent').classList.toggle('active',tab==='entregue');
+  document.getElementById('req-tab-arequis').classList.toggle('active',tab==='arequisitar');
   renderReqCards();
 }
 
 function renderRequisicoes(){
   document.getElementById('req-badge-pend').textContent=reqPend.length;
   document.getElementById('req-badge-ent').textContent=reqEnt.length;
+  document.getElementById('req-badge-arequis').textContent=getItensARequisitar().length;
   renderReqCards();
 }
 
 function renderReqCards(){
+  if(reqTabAtiva==='arequisitar'){
+    renderARequisitarCards();
+    return;
+  }
   const lista=reqTabAtiva==='pendente'?reqPend:reqEnt;
   const isPend=reqTabAtiva==='pendente';
 
@@ -1139,6 +1159,43 @@ function renderReqCards(){
         <span class="badge" style="background:${isPend?'var(--crit-bg)':'var(--ok-bg)'};color:${corLabel}">${labelTipo}</span>
       </div>
       ${cards}
+    </div>`;
+  }).join('');
+}
+
+// ── A REQUISITAR — itens críticos/alerta/ruptura sem requisição pendente ──
+function renderARequisitarCards(){
+  const itens=getItensARequisitar();
+
+  if(itens.length===0){
+    document.getElementById('req-cards').innerHTML=`
+      <div class="card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:32px;margin-bottom:8px">✅</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text)">Tudo certo!</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Todos os itens críticos já possuem requisição pendente.</div>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('req-cards').innerHTML=itens.map(e=>{
+    const status=statusBadge(e.dias);
+    const corDias=e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':'var(--warn)';
+    return`
+    <div class="req-card">
+      <div class="req-card-top">
+        <div>
+          <div class="req-card-name">${e.nome}</div>
+          <div class="req-card-memo">${e.instrumento} · Cód. ${e.cod}</div>
+        </div>
+        <div>
+          <div class="req-card-qty" style="color:${corDias}">${e.dias<=0?'0':e.dias}</div>
+          <div class="req-card-qty-label">dias</div>
+        </div>
+      </div>
+      <div class="req-card-footer" style="justify-content:space-between">
+        <span style="font-size:11px;color:var(--muted)">Saldo: ${fN(e.saldo)} · consumo: ${fN(e.consumo)}/mês</span>
+        ${status}
+      </div>
     </div>`;
   }).join('');
 }
