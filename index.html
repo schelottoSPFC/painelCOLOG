@@ -12,10 +12,10 @@
   --navy:#0f172a;--navy2:#1e293b;--blue:#1d4ed8;--accent:#e94560;
   --bg:#f1f5f9;--white:#ffffff;--border:#e2e8f0;
   --text:#0f172a;--muted:#64748b;--light:#f8fafc;
-  --ok:#16a34a;--ok-bg:#dcfce7;
-  --warn:#d97706;--warn-bg:#fef3c7;
-  --crit:#ea580c;--crit-bg:#ffedd5;
-  --danger:#dc2626;--danger-bg:#fee2e2;
+  --ok:#16a34a;--ok-bg:#dcfce7;--ok-kpi-bg:#dcfce7;
+  --warn:#d97706;--warn-bg:#fef3c7;--warn-kpi-bg:#fef3c7;
+  --crit:#ea580c;--crit-bg:#ffedd5;--crit-kpi-bg:#ffedd5;
+  --danger:#dc2626;--danger-bg:#fee2e2;--danger-kpi-bg:#fee2e2;
   --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
   --radius:12px;
   --transition-theme:background-color .25s ease,color .25s ease,border-color .25s ease;
@@ -24,10 +24,10 @@ html[data-theme="dark"]{
   --navy:#0b1120;--navy2:#0f172a;--blue:#60a5fa;--accent:#fb7185;
   --bg:#0f172a;--white:#1a2433;--border:#2d3a4f;
   --text:#e8edf5;--muted:#94a3b8;--light:#1e293b;
-  --ok:#4ade80;--ok-bg:#0f2e1c;
-  --warn:#fbbf24;--warn-bg:#3a2c0c;
-  --crit:#fb923c;--crit-bg:#3a230f;
-  --danger:#f87171;--danger-bg:#3a1414;
+  --ok:#4ade80;--ok-bg:#0f2e1c;--ok-kpi-bg:#15532d;
+  --warn:#fbbf24;--warn-bg:#3a2c0c;--warn-kpi-bg:#6b4a0c;
+  --crit:#fb923c;--crit-bg:#3a230f;--crit-kpi-bg:#7c3a10;
+  --danger:#f87171;--danger-bg:#3a1414;--danger-kpi-bg:#7f1d1d;
   --shadow:0 1px 3px rgba(0,0,0,0.3),0 4px 16px rgba(0,0,0,0.25);
 }
 html,body,.kpi-card,.card,.highlight-card,.exp-card,.req-card,.summary-card,.mini-stat,.filter-input,.filter-btn,thead tr,tbody tr,.bottom-nav,.header{
@@ -112,21 +112,26 @@ html[data-theme="dark"] .theme-icon-sun{display:block}
 .hl-status{flex-shrink:0;position:relative;z-index:1}
 
 /* ── KPI GRID ── */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-section-title{
+  font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kpi-card{
-  border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);
   cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;
   background:var(--kpi-bg,var(--white));border:1px solid var(--kpi-border,var(--border));border-left:5px solid var(--kpi-accent,transparent);
 }
 .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.12)}
-.kpi-card::after{content:'';position:absolute;top:0;right:0;width:70px;height:70px;border-radius:50%;opacity:.12;transform:translate(22px,-22px);pointer-events:none;background:var(--kpi-accent,transparent)}
+.kpi-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.12;transform:translate(18px,-18px);pointer-events:none;background:var(--kpi-accent,transparent)}
 .kpi-icon{
-  font-size:18px;margin-bottom:10px;width:34px;height:34px;border-radius:9px;
+  margin-bottom:8px;width:28px;height:28px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;background:var(--kpi-icon-bg,var(--light));
 }
-.kpi-value{font-size:36px;font-weight:800;line-height:1;letter-spacing:-1px;position:relative;z-index:1}
-.kpi-label{font-size:12px;font-weight:700;color:var(--text);margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;position:relative;z-index:1}
-.kpi-sub{font-size:11px;color:var(--muted);margin-top:2px;position:relative;z-index:1}
+.kpi-icon svg{width:16px;height:16px}
+.kpi-value{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px;position:relative;z-index:1}
+.kpi-label{font-size:11px;font-weight:700;color:var(--text);margin-top:4px;text-transform:uppercase;letter-spacing:0.4px;position:relative;z-index:1}
+.kpi-sub{font-size:10px;color:var(--muted);margin-top:2px;position:relative;z-index:1}
 .kpi-trend{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px}
 
 /* ── GRID LAYOUTS ── */
@@ -383,8 +388,8 @@ tbody td{padding:10px 14px;vertical-align:middle}
   .tabs{display:none}
   .content{padding:16px 14px}
   .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .kpi-value{font-size:28px}
-  .kpi-card{padding:14px 16px}
+  .kpi-value{font-size:24px}
+  .kpi-card{padding:12px 14px}
   .two-col{grid-template-columns:1fr;gap:12px}
   .three-col{grid-template-columns:1fr}
   .card{padding:16px}
@@ -401,7 +406,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
 }
 @media(max-width:400px){
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .kpi-value{font-size:24px}
+  .kpi-value{font-size:21px}
 }
 </style>
 </head>
@@ -441,6 +446,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
 
   <!-- ── VISÃO GERAL ── -->
   <div id="visao-geral" class="tab-content active">
+    <div class="kpi-section-title">📊 Status Geral do Estoque</div>
     <div class="kpi-grid" id="kpi-grid"></div>
     <div class="highlight-grid" id="highlight-grid"></div>
     <div class="two-col">
@@ -605,6 +611,7 @@ function toggleTheme(){
   const next=current==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme',next);
   localStorage.setItem('painel-theme',next);
+  if(typeof renderKPI==='function') renderKPI();
 }
 
 // ════════════════════════════════════════════
@@ -902,19 +909,29 @@ function renderHighlights(){
 
 // ── KPI ──
 function renderKPI(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const iconRuptura=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="6.5" y1="12" x2="17.5" y2="12"/></svg>`;
+  const iconCritico=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.5 1.8 18a1.6 1.6 0 0 0 1.4 2.5h17.6a1.6 1.6 0 0 0 1.4-2.5L13.7 3.5a1.6 1.6 0 0 0-2.8 0z"/><line x1="12" y1="9.5" x2="12" y2="13.5"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/></svg>`;
+  const iconAlerta=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4.5"/><circle cx="12" cy="15.5" r="0.6" fill="currentColor" stroke="none"/><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"/></svg>`;
+  const iconOk=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
   const cards=[
-    {label:"Em Ruptura",value:ruptura,color:"var(--danger)",bg:"var(--danger-bg)",icon:"⛔",sub:"estoque zerado agora",filter:"ruptura"},
-    {label:"Crítico ≤30 dias",value:critico,color:"var(--crit)",bg:"var(--crit-bg)",icon:"🔴",sub:"requer ação imediata",filter:"critico"},
-    {label:"Alerta 31–60 dias",value:alerta,color:"var(--warn)",bg:"var(--warn-bg)",icon:"🟡",sub:"monitorar de perto",filter:"alerta"},
-    {label:"Situação Normal",value:ok,color:"var(--ok)",bg:"var(--ok-bg)",icon:"✅",sub:"estoque adequado",filter:"todos"},
+    {label:"Em Ruptura",value:ruptura,color:"var(--danger)",bg:"var(--danger-kpi-bg)",icon:iconRuptura,sub:"estoque zerado agora",filter:"ruptura"},
+    {label:"Crítico ≤30 dias",value:critico,color:"var(--crit)",bg:"var(--crit-kpi-bg)",icon:iconCritico,sub:"requer ação imediata",filter:"critico"},
+    {label:"Alerta 31–60 dias",value:alerta,color:"var(--warn)",bg:"var(--warn-kpi-bg)",icon:iconAlerta,sub:"monitorar de perto",filter:"alerta"},
+    {label:"Situação Normal",value:ok,color:"var(--ok)",bg:"var(--ok-kpi-bg)",icon:iconOk,sub:"estoque adequado",filter:"todos"},
   ];
-  document.getElementById('kpi-grid').innerHTML=cards.map(c=>`
-    <div class="kpi-card" style="--kpi-bg:${c.bg};--kpi-accent:${c.color};--kpi-border:${c.color};--kpi-icon-bg:rgba(0,0,0,0.08)" onclick="goToEstoque('${c.filter}')">
-      <div class="kpi-icon">${c.icon}</div>
-      <div class="kpi-value" style="color:${c.color}">${c.value}</div>
-      <div class="kpi-label" style="color:${c.color};opacity:.85">${c.label}</div>
-      <div class="kpi-sub" style="color:var(--text);opacity:.65">${c.sub}</div>
-    </div>`).join('');
+  document.getElementById('kpi-grid').innerHTML=cards.map(c=>{
+    const textColor=isDark?'#ffffff':c.color;
+    const labelColor=isDark?'rgba(255,255,255,.9)':c.color;
+    const subColor=isDark?'rgba(255,255,255,.75)':'var(--text)';
+    return`
+    <div class="kpi-card" style="--kpi-bg:${c.bg};--kpi-accent:${c.color};--kpi-border:${c.color};--kpi-icon-bg:rgba(0,0,0,0.1)" onclick="goToEstoque('${c.filter}')">
+      <div class="kpi-icon" style="color:${c.color}">${c.icon}</div>
+      <div class="kpi-value" style="color:${textColor}">${c.value}</div>
+      <div class="kpi-label" style="color:${labelColor};opacity:.9">${c.label}</div>
+      <div class="kpi-sub" style="color:${subColor};opacity:.85">${c.sub}</div>
+    </div>`;
+  }).join('');
 }
 
 function goToEstoque(filter){
