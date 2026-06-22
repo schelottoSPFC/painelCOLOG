@@ -528,6 +528,9 @@ tbody td{padding:10px 14px;vertical-align:middle}
       <span class="card-title" style="margin:0">📄 Contratos e Atas Vigentes</span>
       <span class="badge badge-green" id="contratos-count"></span>
     </div>
+    <div class="filter-bar">
+      <input class="filter-input" id="contratos-search-input" type="search" placeholder="🔍 Buscar item, ata ou fornecedor..." oninput="renderContratos()" style="width:100%">
+    </div>
     <div id="contratos-grupos"></div>
   </div>
 
@@ -714,6 +717,7 @@ const contratos = [
   {instr:"Ata 51/2025 - BEEVOLT ENERGY",venc:new Date("2026-10-14"),cod:5359,nome:"Pilha Média",qtdContratada:100,preco:5.02,qtdRequisitada:60,qtdRestante:40},
   {instr:"Ata 51/2025 - BEEVOLT ENERGY",venc:new Date("2026-10-14"),cod:5342,nome:"Pilha Pequena AA",qtdContratada:2300,preco:1.52,qtdRequisitada:1250,qtdRestante:1050},
   {instr:"Ata 53/2025 - N SOLUÇÕES EM TI",venc:new Date("2027-03-24"),cod:13671,nome:"Plástico Transparente Bolha",qtdContratada:200,preco:3.36,qtdRequisitada:100,qtdRestante:100},
+  {instr:"Ata 52/2025 - Kelven Gabryel Nogueira da Silva",venc:new Date("2026-10-14"),cod:27898,nome:"Filme de Polietileno Stretch",qtdContratada:103,preco:85.45,qtdRequisitada:35,qtdRestante:68},
 ];
 
 const requisicoes = [
@@ -739,6 +743,7 @@ const requisicoes = [
   {memo:"Memo 13/2026",cod:2053,nome:"Fita Adesiva Transparente",qtd:150,processo:"750.995/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 15/2026",cod:1800,nome:"Cola Plástica",qtd:140,processo:"753.632/2026",situacao:"pendente",pagamento:null},
   {memo:"OF 01 - Contrato 029.1/2025",cod:16513,nome:"Açúcar",qtd:13000,processo:"e-mail",situacao:"pendente",pagamento:null},
+  {memo:"Memo 21/2026",cod:27898,nome:"Filme de Polietileno Stretch",qtd:45,processo:"930.658/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 10/2026",cod:2078,nome:"Papel A4",qtd:4000,processo:"750.626/2026",situacao:"entregue",pagamento:"909.299/2026"},
   {memo:"Memo 48/2025",cod:16077,nome:"Chá de Boldo",qtd:950,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
   {memo:"Memo 48/2025",cod:16075,nome:"Chá de Camomila",qtd:1500,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
@@ -767,6 +772,7 @@ const requisicoes = [
   {memo:"Memo 07/2026",cod:25299,nome:"Pincel Atômico Permanente - Vermelho",qtd:70,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
   {memo:"Memo 07/2026",cod:30381,nome:"Pincel Quadro Magnético - Azul",qtd:70,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
   {memo:"Memo 07/2026",cod:30382,nome:"Pincel Quadro Magnético - Preto",qtd:80,processo:"423.415/2026",situacao:"entregue",pagamento:"550.400/2026"},
+  {memo:"Memo 52/2025",cod:27898,nome:"Filme de Polietileno Stretch",qtd:23,processo:"1.458.008/2025",situacao:"entregue",pagamento:"218.759/2026"},
 ];
 
 const processosConcluidos = [
@@ -1073,11 +1079,34 @@ function renderEstoqueTable(){
 
 // ── CONTRATOS — cards expansíveis agrupados por instrumento ──
 function renderContratos(){
-  const totalInstr=[...new Set(contratos.map(c=>c.instr))].length;
-  document.getElementById('contratos-count').textContent=`${contratos.length} itens · ${totalInstr} instrumentos`;
+  const searchEl=document.getElementById('contratos-search-input');
+  const search=(searchEl&&searchEl.value||'').toLowerCase().trim();
+
+  let listaFiltrada=contratos;
+  if(search){
+    listaFiltrada=contratos.filter(c=>
+      c.nome.toLowerCase().includes(search)||
+      c.instr.toLowerCase().includes(search)||
+      String(c.cod).includes(search)
+    );
+  }
+
+  const totalInstr=[...new Set(listaFiltrada.map(c=>c.instr))].length;
+  document.getElementById('contratos-count').textContent=
+    search?`${listaFiltrada.length} de ${contratos.length} itens`:`${contratos.length} itens · ${totalInstr} instrumentos`;
+
+  if(listaFiltrada.length===0){
+    document.getElementById('contratos-grupos').innerHTML=`
+      <div class="card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:32px;margin-bottom:8px">🔍</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text)">Nenhum item encontrado</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Tente buscar por outro nome, ata ou fornecedor.</div>
+      </div>`;
+    return;
+  }
 
   const grupos={};
-  contratos.forEach(c=>{
+  listaFiltrada.forEach(c=>{
     if(!grupos[c.instr]) grupos[c.instr]={venc:c.venc,itens:[]};
     grupos[c.instr].itens.push(c);
   });
