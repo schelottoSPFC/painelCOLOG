@@ -335,8 +335,19 @@ tbody td{padding:10px 14px;vertical-align:middle}
 .exp-bar-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
 .exp-bar-label span{color:var(--muted)}
 .exp-bar-label strong{font-weight:700}
-.exp-track{background:var(--border);border-radius:4px;height:8px;overflow:hidden}
-.exp-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.exp-track{background:var(--border);border-radius:4px;height:8px;overflow:hidden;position:relative}
+.exp-fill{height:100%;border-radius:4px;transition:width .6s ease;position:absolute;left:0;top:0}
+.exp-fill-pending{
+  height:100%;border-radius:0 4px 4px 0;transition:width .6s ease;position:absolute;top:0;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.55) 0,rgba(255,255,255,0.55) 3px,transparent 3px,transparent 6px);
+}
+.exp-bar-legend{display:flex;gap:14px;margin-top:6px;font-size:10px;color:var(--muted)}
+.exp-bar-legend-item{display:flex;align-items:center;gap:5px}
+.exp-bar-legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.exp-bar-legend-swatch.pending{
+  background-image:repeating-linear-gradient(45deg,currentColor 0,currentColor 2px,transparent 2px,transparent 4px);
+  opacity:.7;
+}
 .exp-zero{font-size:11px;color:var(--danger);font-weight:700;margin-top:6px}
 
 /* ── REQ SUB-TABS ── */
@@ -1089,6 +1100,18 @@ function renderContratos(){
       const cor=pct>=90?'var(--danger)':pct>=60?'var(--warn)':'var(--ok)';
       const valorTotal=c.qtdContratada*c.preco;
       const zero=c.qtdRestante===0?`<div class="exp-zero">⚠️ Cota esgotada</div>`:'';
+
+      // Quantidade já requisitada que ainda está pendente de entrega
+      const qtdPendenteEntrega=reqPend.filter(r=>r.cod===c.cod).reduce((s,r)=>s+r.qtd,0);
+      const pctPendente=c.qtdContratada>0?Math.min(Math.round(qtdPendenteEntrega/c.qtdContratada*100),pct):0;
+      const pctEntregue=Math.max(pct-pctPendente,0);
+      const pendenteBar=pctPendente>0?`<div class="exp-fill-pending" style="left:${pctEntregue}%;width:${pctPendente}%;color:${cor}"></div>`:'';
+      const legendaPendente=qtdPendenteEntrega>0?`
+            <div class="exp-bar-legend">
+              <div class="exp-bar-legend-item"><div class="exp-bar-legend-swatch" style="background:${cor}"></div>Entregue</div>
+              <div class="exp-bar-legend-item"><div class="exp-bar-legend-swatch pending" style="color:${cor}"></div>Pendente de entrega (${fN(qtdPendenteEntrega)})</div>
+            </div>`:'';
+
       return`
       <div class="exp-card" onclick="toggleExpCard(this)">
         <div class="exp-header">
@@ -1125,7 +1148,8 @@ function renderContratos(){
               <span>Consumo da cota</span>
               <strong style="color:${cor}">${pct}%</strong>
             </div>
-            <div class="exp-track"><div class="exp-fill" style="width:${pct}%;background:${cor}"></div></div>
+            <div class="exp-track"><div class="exp-fill" style="width:${pct}%;background:${cor}"></div>${pendenteBar}</div>
+            ${legendaPendente}
           </div>
           ${zero}
         </div>
