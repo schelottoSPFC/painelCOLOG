@@ -100,7 +100,6 @@ html[data-theme="dark"] .theme-icon-sun{display:block}
 .hl-icon{
   font-size:20px;width:38px;height:38px;border-radius:10px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:var(--hl-icon-bg,rgba(29,78,216,0.1));
 }
 .hl-name{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-0.2px}
 .hl-instr{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;font-weight:600}
@@ -126,7 +125,7 @@ html[data-theme="dark"] .theme-icon-sun{display:block}
 .kpi-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.12;transform:translate(18px,-18px);pointer-events:none;background:var(--kpi-accent,transparent)}
 .kpi-icon{
   margin-bottom:8px;width:28px;height:28px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;background:var(--kpi-icon-bg,var(--light));
+  display:flex;align-items:center;justify-content:center;
 }
 .kpi-icon svg{width:16px;height:16px}
 .kpi-value{font-size:28px;font-weight:800;line-height:1;letter-spacing:-1px;position:relative;z-index:1}
@@ -639,7 +638,7 @@ const estoque = [
   {cod:14896,nome:"Pilha Alcalina AAA",saldo:0,consumo:61,ruptura:new Date("2026-06-16"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
   {cod:5359,nome:"Pilha Média",saldo:45,consumo:12,ruptura:new Date("2026-10-06"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
   {cod:5342,nome:"Pilha Pequena AA",saldo:208,consumo:140,ruptura:new Date("2026-07-30"),instrumento:"Ata RP",vencimento:new Date("2026-10-14")},
-  {cod:2078,nome:"Papel A4",saldo:1963,consumo:950,ruptura:new Date("2026-08-16"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
+  {cod:2078,nome:"Papel A4",saldo:5963,consumo:950,ruptura:new Date("2026-12-21"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
   {cod:28422,nome:"Pendrive 32 GB",saldo:19,consumo:60,ruptura:new Date("2026-06-25"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
   {cod:1714,nome:"Caneta Esferográfica Azul",saldo:905,consumo:900,ruptura:new Date("2026-07-16"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
   {cod:1795,nome:"Cola em Bastão",saldo:156,consumo:90,ruptura:new Date("2026-08-07"),instrumento:"Ata RP",vencimento:new Date("2026-11-05")},
@@ -681,24 +680,24 @@ const contratos = [
   {instr:"Ata 38/2025 - Arcanjos Alimentos",venc:new Date("2026-09-03"),cod:16073,nome:"Chá de Erva Doce",qtdContratada:4000,preco:2.94,qtdRequisitada:3200,qtdRestante:800},
   {instr:"Ata 38/2025 - Arcanjos Alimentos",venc:new Date("2026-09-03"),cod:16076,nome:"Chá de Frutas Vermelhas",qtdContratada:4500,preco:3.50,qtdRequisitada:3100,qtdRestante:1400},
   {instr:"Ata 38/2025 - Arcanjos Alimentos",venc:new Date("2026-09-03"),cod:16074,nome:"Chá de Hortelã",qtdContratada:5300,preco:2.45,qtdRequisitada:3300,qtdRestante:2000},
-  {instr:"Contrato 029.1/2025",venc:new Date("2027-02-23"),cod:16513,nome:"Açúcar",qtdContratada:49000,preco:3.80,qtdRequisitada:0,qtdRestante:49000},
+  {instr:"Contrato 029.1/2025",venc:new Date("2027-02-23"),cod:16513,nome:"Açúcar",qtdContratada:49000,preco:3.80,qtdRequisitada:13000,qtdRestante:36000},
   {instr:"Ata 33/2025 - PICUHY DISTRIBUIDORA",venc:new Date("2027-01-01"),cod:7303,nome:"Copo Água",qtdContratada:34913,preco:5.25,qtdRequisitada:10500,qtdRestante:24413},
   {instr:"Ata 35/2025 - CDV COMERCIAL",venc:new Date("2027-01-01"),cod:7304,nome:"Copo Café",qtdContratada:16150,preco:1.72,qtdRequisitada:5800,qtdRestante:10350},
-  {instr:"Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1714,nome:"Caneta Esferográfica Azul",qtdContratada:11400,preco:0.44,qtdRequisitada:5500,qtdRestante:5900},
-  {instr:"Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1795,nome:"Cola em Bastão",qtdContratada:900,preco:0.75,qtdRequisitada:450,qtdRestante:450},
-  {instr:"Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1901,nome:"Corretivo Líquido",qtdContratada:330,preco:1.40,qtdRequisitada:180,qtdRestante:150},
-  {instr:"Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:2053,nome:"Fita Adesiva Transparente",qtdContratada:700,preco:0.68,qtdRequisitada:450,qtdRestante:250},
-  {instr:"Jose Adeildo Alves Siqueira",venc:new Date("2026-11-05"),cod:1800,nome:"Cola Plástica",qtdContratada:600,preco:1.81,qtdRequisitada:140,qtdRestante:460},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:2453,nome:"Fita para Empacotamento",qtdContratada:6100,preco:2.42,qtdRequisitada:2400,qtdRestante:3700},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30414,nome:"Pincel Atômico Preto",qtdContratada:350,preco:1.32,qtdRequisitada:180,qtdRestante:170},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:25298,nome:"Pincel Atômico Azul",qtdContratada:400,preco:1.34,qtdRequisitada:200,qtdRestante:200},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:25299,nome:"Pincel Atômico Vermelho",qtdContratada:250,preco:1.34,qtdRequisitada:140,qtdRestante:110},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30381,nome:"Pincel Quadro Azul",qtdContratada:200,preco:1.23,qtdRequisitada:150,qtdRestante:50},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30382,nome:"Pincel Quadro Preto",qtdContratada:170,preco:1.23,qtdRequisitada:170,qtdRestante:0},
-  {instr:"Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30383,nome:"Pincel Quadro Vermelho",qtdContratada:150,preco:1.23,qtdRequisitada:40,qtdRestante:110},
-  {instr:"MultPaper Distribuidora",venc:new Date("2026-11-05"),cod:2078,nome:"Papel A4",qtdContratada:16481,preco:20.40,qtdRequisitada:4000,qtdRestante:12481},
-  {instr:"Aleksander Nunes Marques",venc:new Date("2026-11-05"),cod:28422,nome:"Pendrive 32 GB",qtdContratada:1000,preco:23.32,qtdRequisitada:0,qtdRestante:1000},
-  {instr:"BBC Distribuidora",venc:new Date("2026-11-05"),cod:2237,nome:"Envelope Kraft c/ Timbre",qtdContratada:19000,preco:0.75,qtdRequisitada:17000,qtdRestante:2000},
+  {instr:"Ata 63/2025 - Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1714,nome:"Caneta Esferográfica Azul",qtdContratada:11400,preco:0.44,qtdRequisitada:5500,qtdRestante:5900},
+  {instr:"Ata 63/2025 - Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1795,nome:"Cola em Bastão",qtdContratada:900,preco:0.75,qtdRequisitada:450,qtdRestante:450},
+  {instr:"Ata 63/2025 - Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:1901,nome:"Corretivo Líquido",qtdContratada:330,preco:1.40,qtdRequisitada:180,qtdRestante:150},
+  {instr:"Ata 63/2025 - Josemar Wellington Lourenço",venc:new Date("2026-11-05"),cod:2053,nome:"Fita Adesiva Transparente",qtdContratada:700,preco:0.68,qtdRequisitada:450,qtdRestante:250},
+  {instr:"Ata 64/2025 - Jose Adeildo Alves Siqueira",venc:new Date("2026-11-05"),cod:1800,nome:"Cola Plástica",qtdContratada:600,preco:1.81,qtdRequisitada:140,qtdRestante:460},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:2453,nome:"Fita para Empacotamento",qtdContratada:6100,preco:2.42,qtdRequisitada:2400,qtdRestante:3700},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30414,nome:"Pincel Atômico Preto",qtdContratada:350,preco:1.32,qtdRequisitada:180,qtdRestante:170},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:25298,nome:"Pincel Atômico Azul",qtdContratada:400,preco:1.34,qtdRequisitada:200,qtdRestante:200},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:25299,nome:"Pincel Atômico Vermelho",qtdContratada:250,preco:1.34,qtdRequisitada:140,qtdRestante:110},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30381,nome:"Pincel Quadro Azul",qtdContratada:200,preco:1.23,qtdRequisitada:150,qtdRestante:50},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30382,nome:"Pincel Quadro Preto",qtdContratada:170,preco:1.23,qtdRequisitada:170,qtdRestante:0},
+  {instr:"Ata 65/2025 - Rafa Paper Distribuidora",venc:new Date("2026-11-05"),cod:30383,nome:"Pincel Quadro Vermelho",qtdContratada:150,preco:1.23,qtdRequisitada:40,qtdRestante:110},
+  {instr:"Ata 49/2024 - MultPaper Distribuidora",venc:new Date("2026-11-05"),cod:2078,nome:"Papel A4",qtdContratada:18891,preco:19.88,qtdRequisitada:4000,qtdRestante:14891},
+  {instr:"Ata 67/2025 - Aleksander Nunes Marques",venc:new Date("2026-11-05"),cod:28422,nome:"Pendrive 32 GB",qtdContratada:1000,preco:23.32,qtdRequisitada:0,qtdRestante:1000},
+  {instr:"Ata 68/2025 - BBC Distribuidora",venc:new Date("2026-11-05"),cod:2237,nome:"Envelope Kraft c/ Timbre",qtdContratada:19000,preco:0.75,qtdRequisitada:17000,qtdRestante:2000},
   {instr:"Ata 51/2025 - BEEVOLT ENERGY",venc:new Date("2026-10-14"),cod:5357,nome:"Bateria Alcalina 9V",qtdContratada:50,preco:7.00,qtdRequisitada:50,qtdRestante:0},
   {instr:"Ata 51/2025 - BEEVOLT ENERGY",venc:new Date("2026-10-14"),cod:14896,nome:"Pilha Alcalina AAA",qtdContratada:1100,preco:1.56,qtdRequisitada:650,qtdRestante:450},
   {instr:"Ata 51/2025 - BEEVOLT ENERGY",venc:new Date("2026-10-14"),cod:5359,nome:"Pilha Média",qtdContratada:100,preco:5.02,qtdRequisitada:60,qtdRestante:40},
@@ -715,7 +714,6 @@ const requisicoes = [
   {memo:"Memo 09/2026",cod:16074,nome:"Chá de Hortelã",qtd:1700,processo:"750.318/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 04/2026",cod:7303,nome:"Copo Água",qtd:10500,processo:"337.914/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 16/2026",cod:13671,nome:"Plástico Transparente Bolha",qtd:100,processo:"754.591/2026",situacao:"pendente",pagamento:null},
-  {memo:"Memo 10/2026",cod:2078,nome:"Papel A4",qtd:4000,processo:"750.626/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 11/2026",cod:2453,nome:"Fita para Empacotamento",qtd:700,processo:"750.769/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 11/2026",cod:30414,nome:"Pincel Atômico Permanente - Preto",qtd:90,processo:"750.769/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 11/2026",cod:25298,nome:"Pincel Atômico Permanente - Azul",qtd:100,processo:"750.769/2026",situacao:"pendente",pagamento:null},
@@ -729,6 +727,8 @@ const requisicoes = [
   {memo:"Memo 13/2026",cod:1901,nome:"Corretivo Líquido",qtd:80,processo:"750.995/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 13/2026",cod:2053,nome:"Fita Adesiva Transparente",qtd:150,processo:"750.995/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 15/2026",cod:1800,nome:"Cola Plástica",qtd:140,processo:"753.632/2026",situacao:"pendente",pagamento:null},
+  {memo:"OF 01 - Contrato 029.1/2025",cod:16513,nome:"Açúcar",qtd:13000,processo:"e-mail",situacao:"pendente",pagamento:null},
+  {memo:"Memo 10/2026",cod:2078,nome:"Papel A4",qtd:4000,processo:"750.626/2026",situacao:"entregue",pagamento:"909.299/2026"},
   {memo:"Memo 48/2025",cod:16077,nome:"Chá de Boldo",qtd:950,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
   {memo:"Memo 48/2025",cod:16075,nome:"Chá de Camomila",qtd:1500,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
   {memo:"Memo 48/2025",cod:29145,nome:"Chá de Capim Cidreira",qtd:1600,processo:"1.378.315/2025",situacao:"entregue",pagamento:"1.455.005/2025"},
