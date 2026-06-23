@@ -268,13 +268,21 @@ tbody td{padding:10px 14px;vertical-align:middle}
 .bnav-icon-wrap{position:relative;display:inline-block}
 
 /* ── DONUT CHART ── */
-.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.donut-svg{flex-shrink:0}
-.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1;min-width:120px}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
-.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.legend-label{flex:1;font-weight:500}
-.legend-val{font-weight:800}
+.stock-bar-wrap{width:100%}
+.stock-bar-total{display:flex;align-items:baseline;gap:6px;margin-bottom:12px}
+.stock-bar-total-num{font-size:28px;font-weight:800;color:var(--text)}
+.stock-bar-total-lbl{font-size:12px;color:var(--muted)}
+.stock-bar-track{display:flex;height:26px;border-radius:8px;overflow:hidden;background:var(--border)}
+.stock-bar-seg{
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;
+  transition:width .8s ease;min-width:0;
+}
+.stock-bar-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.stock-bar-leg-item{display:flex;align-items:center;gap:6px;font-size:12px}
+.stock-bar-leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.stock-bar-leg-name{color:var(--muted);flex:1}
+.stock-bar-leg-val{font-weight:700;color:var(--text)}
 
 /* ── SPARKLINE ── */
 .spark-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
@@ -471,7 +479,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
         <div class="card-header">
           <span class="card-title">📊 Status do Estoque</span>
         </div>
-        <div class="donut-wrap" id="donut-wrap"></div>
+        <div class="stock-bar-wrap" id="donut-wrap"></div>
       </div>
     </div>
     <div class="two-col">
@@ -962,31 +970,27 @@ function renderDonut(){
     {val:alerta,color:'#d97706',label:'Alerta'},
     {val:ok,color:'#16a34a',label:'Normal'},
   ];
-  const r=60,cx=70,cy=70,stroke=18;
-  const circ=2*Math.PI*r;
-  let offset=0;
-  let paths='';
-  segments.forEach(s=>{
-    const pct=s.val/total;
-    const dash=pct*circ;
-    paths+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="${stroke}"
-      stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-offset}" stroke-linecap="butt"
-      style="transition:stroke-dasharray .8s ease"/>`;
-    offset+=dash;
-  });
-  const legend=segments.map(s=>`
-    <div class="legend-item">
-      <div class="legend-dot" style="background:${s.color}"></div>
-      <span class="legend-label">${s.label}</span>
-      <span class="legend-val">${s.val}</span>
-    </div>`).join('');
+  const bars=segments.map(s=>{
+    const pct=total>0?(s.val/total*100):0;
+    const showLabel=pct>=8; // só escreve % dentro se houver espaço
+    return`<div class="stock-bar-seg" style="width:${pct}%;background:${s.color}" title="${s.label}: ${s.val} (${pct.toFixed(1)}%)">${showLabel?pct.toFixed(0)+'%':''}</div>`;
+  }).join('');
+  const legend=segments.map(s=>{
+    const pct=total>0?(s.val/total*100):0;
+    return`
+    <div class="stock-bar-leg-item">
+      <div class="stock-bar-leg-dot" style="background:${s.color}"></div>
+      <span class="stock-bar-leg-name">${s.label}</span>
+      <span class="stock-bar-leg-val">${s.val} · ${pct.toFixed(1)}%</span>
+    </div>`;
+  }).join('');
   document.getElementById('donut-wrap').innerHTML=`
-    <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140" style="transform:rotate(-90deg)">
-      ${paths}
-      <text x="70" y="70" text-anchor="middle" dominant-baseline="central" font-size="22" font-weight="800" fill="#0f172a" style="transform:rotate(90deg);transform-origin:70px 70px">${total}</text>
-      <text x="70" y="88" text-anchor="middle" dominant-baseline="central" font-size="9" fill="#64748b" style="transform:rotate(90deg);transform-origin:70px 70px">itens</text>
-    </svg>
-    <div class="donut-legend">${legend}</div>`;
+    <div class="stock-bar-total">
+      <span class="stock-bar-total-num">${total}</span>
+      <span class="stock-bar-total-lbl">itens monitorados</span>
+    </div>
+    <div class="stock-bar-track">${bars}</div>
+    <div class="stock-bar-legend">${legend}</div>`;
 }
 
 // ── CRITICOS ──
