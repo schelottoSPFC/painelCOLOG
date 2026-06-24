@@ -1013,7 +1013,7 @@ function renderKPI(){
     {label:"Em Ruptura",value:ruptura,color:"var(--danger)",bg:"var(--danger-kpi-bg)",icon:"⛔",sub:"estoque zerado agora",filter:"ruptura"},
     {label:"Crítico ≤30 dias",value:critico,color:"var(--crit)",bg:"var(--crit-kpi-bg)",icon:"🔴",sub:"requer ação imediata",filter:"critico"},
     {label:"Alerta 31–60 dias",value:alerta,color:"var(--warn)",bg:"var(--warn-kpi-bg)",icon:"🟡",sub:"monitorar de perto",filter:"alerta"},
-    {label:"Situação Normal",value:ok,color:"var(--ok)",bg:"var(--ok-kpi-bg)",icon:"✅",sub:"estoque adequado",filter:"todos"},
+    {label:"Situação Normal",value:ok,color:"var(--ok)",bg:"var(--ok-kpi-bg)",icon:"✅",sub:"estoque adequado",filter:"ok"},
   ];
   document.getElementById('kpi-grid').innerHTML=cards.map(c=>{
     const textColor=isDark?'#ffffff':c.color;
