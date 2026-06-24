@@ -426,6 +426,55 @@ tbody td{padding:10px 14px;vertical-align:middle}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .kpi-value{font-size:21px}
 }
+
+/* ── ACCESSIBILITY: focus & reduced motion ── */
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.tab:focus-visible{outline-offset:-2px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* ── SCROLLABLE TABLE WITH STICKY HEADER (desktop) ── */
+.table-wrap{max-height:62vh;overflow-y:auto}
+.table-wrap thead th{position:sticky;top:0;z-index:2}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:24px 12px;color:var(--muted)}
+.empty-state .empty-icon{font-size:26px;margin-bottom:6px}
+.empty-state .empty-text{font-size:12px}
+
+/* ── SCROLL TO TOP (mobile) ── */
+.scroll-top-btn{
+  display:none;position:fixed;right:16px;bottom:86px;z-index:150;
+  width:42px;height:42px;border-radius:50%;border:1px solid var(--border);
+  background:var(--navy);color:#fff;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,0.25);cursor:pointer;opacity:0;
+  transform:translateY(8px);transition:opacity .2s,transform .2s;
+}
+.scroll-top-btn.visible{opacity:1;transform:translateY(0)}
+.scroll-top-btn svg{width:18px;height:18px}
+
+/* ── ESTOQUE: CARD VIEW (mobile) ── */
+.estoque-card-view{display:none}
+.estoque-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin-bottom:8px;
+}
+.estoque-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.estoque-card-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.estoque-card-cod{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.estoque-card-days{font-size:20px;font-weight:800;text-align:right;line-height:1;flex-shrink:0}
+.estoque-card-days-label{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
+.estoque-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;margin-bottom:8px}
+.estoque-card-grid div span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.estoque-card-grid div strong{font-size:12px;color:var(--text)}
+.estoque-card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px;border-top:1px solid var(--border)}
+@media(max-width:768px){
+  .table-wrap{max-height:none;overflow-y:visible}
+  #estoque .table-wrap{display:none}
+  .estoque-card-view{display:block}
+  .scroll-top-btn{display:flex}
+}
 </style>
 </head>
 <body>
@@ -450,12 +499,12 @@ tbody td{padding:10px 14px;vertical-align:middle}
       </button>
     </div>
   </div>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('visao-geral',this)">📊 Visão Geral</button>
-    <button class="tab" onclick="showTab('estoque',this)">📦 Estoque</button>
-    <button class="tab" onclick="showTab('contratos',this)">📄 Contratos</button>
-    <button class="tab" onclick="showTab('requisicoes',this)">📋 Requisições</button>
-    <button class="tab" onclick="showTab('tramitacao',this)">⏱ Tramitação</button>
+  <div class="tabs" role="tablist" aria-label="Seções do painel" onkeydown="handleTabKeydown(event)">
+    <button class="tab active" role="tab" aria-selected="true" tabindex="0" id="tabbtn-visao-geral" aria-controls="visao-geral" onclick="showTab('visao-geral',this)">📊 Visão Geral</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1" id="tabbtn-estoque" aria-controls="estoque" onclick="showTab('estoque',this)">📦 Estoque</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1" id="tabbtn-contratos" aria-controls="contratos" onclick="showTab('contratos',this)">📄 Contratos</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1" id="tabbtn-requisicoes" aria-controls="requisicoes" onclick="showTab('requisicoes',this)">📋 Requisições</button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1" id="tabbtn-tramitacao" aria-controls="tramitacao" onclick="showTab('tramitacao',this)">⏱ Tramitação</button>
   </div>
 </div>
 
@@ -525,6 +574,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
         </table>
       </div>
     </div>
+    <div class="estoque-card-view" id="estoque-card-view"></div>
   </div>
 
   <!-- ── CONTRATOS ── -->
@@ -583,9 +633,9 @@ tbody td{padding:10px 14px;vertical-align:middle}
 </div><!-- /app -->
 
 <!-- MOBILE BOTTOM NAV -->
-<nav class="bottom-nav">
+<nav class="bottom-nav" aria-label="Navegação principal">
   <div class="bottom-nav-items">
-    <button class="bnav-item active" onclick="showTab('visao-geral',null,'visao-geral')">
+    <button class="bnav-item active" aria-current="page" onclick="showTab('visao-geral',null,'visao-geral')">
       <span class="bnav-icon-wrap"><span class="bnav-icon">📊</span></span>
       <span class="bnav-label">Geral</span>
     </button>
@@ -613,6 +663,11 @@ tbody td{padding:10px 14px;vertical-align:middle}
     </button>
   </div>
 </nav>
+
+<!-- SCROLL TO TOP (mobile) -->
+<button class="scroll-top-btn" id="scroll-top-btn" aria-label="Voltar ao topo" title="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
 
 <script>
 // ════════════════════════════════════════════
@@ -835,22 +890,43 @@ let currentFilter='todos';
 
 function showTab(id,btn,bnavId){
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.bnav-item').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>{el.classList.remove('active');el.setAttribute('aria-selected','false');el.tabIndex=-1});
+  document.querySelectorAll('.bnav-item').forEach(el=>{el.classList.remove('active');el.removeAttribute('aria-current')});
   document.getElementById(id).classList.add('active');
   if(btn)btn.classList.add('active');
   // sync bottom nav
   const navId=bnavId||id;
   document.querySelectorAll('.bnav-item').forEach(el=>{
-    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+navId+"'"))
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+navId+"'")){
       el.classList.add('active');
+      el.setAttribute('aria-current','page');
+    }
   });
   // sync top tabs
   document.querySelectorAll('.tab').forEach(el=>{
-    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+id+"'"))
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+id+"'")){
       el.classList.add('active');
+      el.setAttribute('aria-selected','true');
+      el.tabIndex=0;
+    }
   });
   currentTab=id;
+}
+
+function handleTabKeydown(e){
+  const tabs=Array.from(document.querySelectorAll('.tab'));
+  const idx=tabs.indexOf(document.activeElement);
+  if(idx===-1)return;
+  let next=null;
+  if(e.key==='ArrowRight') next=tabs[(idx+1)%tabs.length];
+  else if(e.key==='ArrowLeft') next=tabs[(idx-1+tabs.length)%tabs.length];
+  else if(e.key==='Home') next=tabs[0];
+  else if(e.key==='End') next=tabs[tabs.length-1];
+  if(next){
+    e.preventDefault();
+    next.focus();
+    next.click();
+  }
 }
 
 function setFilter(f,btn){
@@ -995,6 +1071,11 @@ function renderDonut(){
 function renderCriticos(){
   const list=estoqueComp.filter(e=>e.dias<=30).sort((a,b)=>a.dias-b.dias);
   document.getElementById('criticos-count').textContent=list.length+' itens';
+  if(list.length===0){
+    document.getElementById('criticos-list').innerHTML=
+      `<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">Nenhum item em ruptura ou crítico.</div></div>`;
+    return;
+  }
   document.getElementById('criticos-list').innerHTML=list.map(e=>`
     <div class="crit-item">
       <div>
@@ -1025,6 +1106,11 @@ function renderMiniStats(){
       <div class="mini-stat-label">${m.label}</div>
     </div>`).join('');
   const procs=[...new Set(reqPend.map(r=>r.processo))];
+  if(procs.length===0){
+    document.getElementById('proc-pendentes-list').innerHTML=
+      `<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">Nenhum processo pendente.</div></div>`;
+    return;
+  }
   document.getElementById('proc-pendentes-list').innerHTML=procs.map(p=>{
     const its=reqPend.filter(r=>r.processo===p);
     return`<div class="proc-item">
@@ -1063,6 +1149,14 @@ function renderEstoqueTable(){
   else if(currentFilter==='ok')      data=data.filter(e=>e.dias>60);
   if(search) data=data.filter(e=>e.nome.toLowerCase().includes(search)||String(e.cod).includes(search));
   data=[...data].sort((a,b)=>a.dias-b.dias);
+
+  if(data.length===0){
+    const empty=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Nenhum material encontrado para este filtro/busca.</div></div>`;
+    document.getElementById('estoque-tbody').innerHTML=`<tr><td colspan="9" style="padding:0">${empty}</td></tr>`;
+    document.getElementById('estoque-card-view').innerHTML=empty;
+    return;
+  }
+
   document.getElementById('estoque-tbody').innerHTML=data.map(e=>`
     <tr>
       <td>${statusBadge(e.dias)}</td>
@@ -1077,6 +1171,33 @@ function renderEstoqueTable(){
         ${fD(e.vencimento)}${e.vencExpired?'<span class="vencido-tag">VENCIDO</span>':''}
       </td>
     </tr>`).join('');
+
+  document.getElementById('estoque-card-view').innerHTML=data.map(e=>{
+    const corDias=e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':e.dias<=60?'var(--warn)':'var(--ok)';
+    return`
+    <div class="estoque-card">
+      <div class="estoque-card-top">
+        <div>
+          <div class="estoque-card-name">${e.nome}</div>
+          <div class="estoque-card-cod">Cód. ${e.cod}</div>
+        </div>
+        <div>
+          <div class="estoque-card-days" style="color:${corDias}">${e.dias<=0?'—':e.dias}</div>
+          <div class="estoque-card-days-label">${e.dias<=0?'ruptura':'dias'}</div>
+        </div>
+      </div>
+      <div class="estoque-card-grid">
+        <div><span>Saldo</span><strong style="color:${e.saldo===0?'var(--danger)':'inherit'}">${fN(e.saldo)}</strong></div>
+        <div><span>Consumo/mês</span><strong>${fN(e.consumo)}</strong></div>
+        <div><span>Ruptura</span><strong>${fD(e.ruptura)}</strong></div>
+        <div><span>Vencimento</span><strong style="color:${e.vencExpired?'var(--danger)':'inherit'}">${fD(e.vencimento)}${e.vencExpired?' ⚠️':''}</strong></div>
+      </div>
+      <div class="estoque-card-footer">
+        ${instrBadge(e.instrumento)}
+        ${statusBadge(e.dias)}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── CONTRATOS — cards expansíveis agrupados por instrumento ──
@@ -1361,6 +1482,15 @@ function renderTramitacao(){
       <div class="s-val">${s.val}</div>
     </div>`).join('');
 }
+
+// ── SCROLL TO TOP (mobile) ──
+(function initScrollTop(){
+  const btn=document.getElementById('scroll-top-btn');
+  if(!btn)return;
+  window.addEventListener('scroll',()=>{
+    btn.classList.toggle('visible',window.scrollY>400);
+  },{passive:true});
+})();
 
 // ════════════════════════════════════════════
 //  INIT
