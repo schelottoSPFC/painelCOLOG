@@ -52,7 +52,8 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .brand-tag{color:var(--accent);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700}
 .header h1{color:#fff;font-size:20px;font-weight:800;letter-spacing:-0.5px;line-height:1.2}
 .header-meta{color:#94a3b8;font-size:12px;margin-top:2px}
-.header-badge{background:rgba(233,69,96,0.15);border:1px solid rgba(233,69,96,0.3);color:#fca5a5;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:4px}
+.header-badge{background:rgba(233,69,96,0.15);border:1px solid rgba(233,69,96,0.3);color:#fca5a5;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:4px;cursor:pointer;transition:background .2s}
+.header-badge:hover{background:rgba(233,69,96,0.28)}
 
 /* ── TABS ── */
 .tabs{display:flex;gap:2px;margin-top:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -492,7 +493,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
       <div class="header-meta" id="header-meta">Carregando...</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-      <div class="header-badge" id="header-badge">...</div>
+      <div class="header-badge" id="header-badge" onclick="goToCriticos()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')goToCriticos()">...</div>
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema claro/escuro" title="Alternar tema claro/escuro">
         <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -523,9 +524,9 @@ tbody td{padding:10px 14px;vertical-align:middle}
       <div class="stock-bar-wrap" id="donut-wrap"></div>
     </div>
     <div class="two-col">
-      <div class="card">
+      <div class="card" id="card-criticos">
         <div class="card-header">
-          <span class="card-title">🚨 Ruptura Iminente</span>
+          <span class="card-title">🚨 Ruptura e Itens Críticos</span>
           <span class="card-badge badge badge-danger" id="criticos-count">...</span>
         </div>
         <div id="criticos-list"></div>
@@ -1058,6 +1059,11 @@ function goToEstoque(filter){
   showTab('estoque',null,'estoque');
   const btn=document.getElementById('btn-'+filter);
   if(btn) setFilter(filter,btn);
+}
+
+function goToCriticos(){
+  showTab('visao-geral',null,'visao-geral');
+  document.getElementById('card-criticos').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // ── DONUT ──
