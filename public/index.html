@@ -568,8 +568,7 @@ tbody td{padding:10px 14px;vertical-align:middle}
             <th style="text-align:right">Consumo/mês</th>
             <th>Ruptura</th>
             <th style="text-align:center">Dias</th>
-            <th>Tipo</th>
-            <th>Contrato / Ata</th>
+            <th>Instrumento</th>
             <th>Vencimento</th>
           </tr></thead>
           <tbody id="estoque-tbody"></tbody>
@@ -909,13 +908,6 @@ const ok      = estoqueComp.filter(e=>e.dias>60).length;
 const reqPend = requisicoes.filter(r=>r.situacao==="pendente");
 const reqEnt  = requisicoes.filter(r=>r.situacao==="entregue");
 
-// Mapa cod → lista de contratos/atas específicos para lookup na aba Estoque
-const instrPorCod = {};
-contratos.forEach(c=>{
-  if(!instrPorCod[c.cod]) instrPorCod[c.cod]=[];
-  if(!instrPorCod[c.cod].includes(c.instr)) instrPorCod[c.cod].push(c.instr);
-});
-
 // ════════════════════════════════════════════
 //  NAV
 // ════════════════════════════════════════════
@@ -1191,15 +1183,12 @@ function renderEstoqueTable(){
 
   if(data.length===0){
     const empty=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Nenhum material encontrado para este filtro/busca.</div></div>`;
-    document.getElementById('estoque-tbody').innerHTML=`<tr><td colspan="10" style="padding:0">${empty}</td></tr>`;
+    document.getElementById('estoque-tbody').innerHTML=`<tr><td colspan="9" style="padding:0">${empty}</td></tr>`;
     document.getElementById('estoque-card-view').innerHTML=empty;
     return;
   }
 
-  document.getElementById('estoque-tbody').innerHTML=data.map(e=>{
-    const instrs=instrPorCod[e.cod]||[];
-    const instrsHtml=instrs.map(n=>`<div style="font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3">${n}</div>`).join('');
-    return`
+  document.getElementById('estoque-tbody').innerHTML=data.map(e=>`
     <tr>
       <td>${statusBadge(e.dias)}</td>
       <td class="mono">${e.cod}</td>
@@ -1209,17 +1198,13 @@ function renderEstoqueTable(){
       <td style="color:${e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':'inherit'};font-size:12px">${fD(e.ruptura)}</td>
       <td style="text-align:center;font-weight:800;color:${e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':e.dias<=60?'var(--warn)':'var(--ok)'}">${e.dias<=0?'—':e.dias}</td>
       <td>${instrBadge(e.instrumento)}</td>
-      <td style="font-size:11px;min-width:160px">${instrs.length?instrsHtml:`<span style="color:var(--muted)">—</span>`}</td>
       <td style="font-size:11px;color:${e.vencExpired?'var(--danger)':'inherit'}">
         ${fD(e.vencimento)}${e.vencExpired?'<span class="vencido-tag">VENCIDO</span>':''}
       </td>
-    </tr>`;
-  }).join('');
+    </tr>`).join('');
 
   document.getElementById('estoque-card-view').innerHTML=data.map(e=>{
     const corDias=e.dias<=0?'var(--danger)':e.dias<=30?'var(--crit)':e.dias<=60?'var(--warn)':'var(--ok)';
-    const instrs=instrPorCod[e.cod]||[];
-    const instrsHtml=instrs.map(n=>`<div style="font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4">${n}</div>`).join('');
     return`
     <div class="estoque-card">
       <div class="estoque-card-top">
@@ -1238,7 +1223,6 @@ function renderEstoqueTable(){
         <div><span>Ruptura</span><strong>${fD(e.ruptura)}</strong></div>
         <div><span>Vencimento</span><strong style="color:${e.vencExpired?'var(--danger)':'inherit'}">${fD(e.vencimento)}${e.vencExpired?' ⚠️':''}</strong></div>
       </div>
-      ${instrs.length?`<div style="padding:8px 0 4px;border-top:1px solid var(--border);margin-top:4px"><span style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700">Contrato / Ata</span>${instrsHtml}</div>`:''}
       <div class="estoque-card-footer">
         ${instrBadge(e.instrumento)}
         ${statusBadge(e.dias)}
