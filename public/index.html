@@ -908,6 +908,9 @@ const ok      = estoqueComp.filter(e=>e.dias>60).length;
 const reqPend = requisicoes.filter(r=>r.situacao==="pendente");
 const reqEnt  = requisicoes.filter(r=>r.situacao==="entregue");
 
+// Lookup cod → dias até ruptura (para mostrar status na aba Contratos)
+const diasPorCod = Object.fromEntries(estoqueComp.map(e=>[e.cod,e.dias]));
+
 // ════════════════════════════════════════════
 //  NAV
 // ════════════════════════════════════════════
@@ -1295,11 +1298,14 @@ function renderContratos(){
               <div class="exp-bar-legend-item"><div class="exp-bar-legend-swatch pending" style="color:${cor}"></div>Pendente de entrega (${fN(qtdPendenteEntrega)})</div>
             </div>`:'';
 
+      const diasItem = diasPorCod[c.cod];
+      const statusItem = diasItem!=null ? statusBadge(diasItem) : '';
       return`
       <div class="exp-card" onclick="toggleExpCard(this)">
         <div class="exp-header">
           <div class="exp-left">
             <div class="exp-name">${c.nome}</div>
+            ${statusItem?`<div style="margin:4px 0 2px">${statusItem}</div>`:''}
             <div class="exp-sub">R$ ${c.preco.toFixed(2)}/un · Total: ${fC(valorTotal)}</div>
           </div>
           <div class="exp-right">
