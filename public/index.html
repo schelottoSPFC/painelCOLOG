@@ -821,7 +821,7 @@ const requisicoes = [
   {memo:"Memo 09/2026",cod:16076,nome:"Chá de Frutas Vermelhas",qtd:1600,processo:"750.318/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 09/2026",cod:16074,nome:"Chá de Hortelã",qtd:1700,processo:"750.318/2026",situacao:"pendente",pagamento:null},
   {memo:"Memo 46/2025",cod:7304,nome:"Copo Café",qtd:2600,processo:"1.279.876/2025",situacao:"entregue",pagamento:"1.400.141/2025"},
-  {memo:"Memo 04/2026",cod:7303,nome:"Copo Água",qtd:10500,processo:"337.914/2026",situacao:"pendente",pagamento:null},
+  {memo:"Memo 04/2026",cod:7303,nome:"Copo Água",qtd:10500,processo:"337.914/2026",situacao:"pendente",pagamento:null,instrRef:"Ata 33/2025"},
   {memo:"Memo 03/2026",cod:7304,nome:"Copo Café",qtd:3200,processo:"337.903/2026",situacao:"entregue",pagamento:"550.559/2026"},
   {memo:"Memo 44/2025",cod:5357,nome:"Bateria Alcalina 9V",qtd:25,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
   {memo:"Memo 44/2025",cod:14896,nome:"Pilha Alcalina AAA 1,5V",qtd:350,processo:"1.264.177/2025",situacao:"entregue",pagamento:"1.360.718/2025"},
@@ -1293,7 +1293,7 @@ function renderContratos(){
       const zero=c.qtdRestante===0?`<div class="exp-zero">⚠️ Cota esgotada</div>`:'';
 
       // Quantidade já requisitada que ainda está pendente de entrega
-      const qtdPendenteEntrega=reqPend.filter(r=>r.cod===c.cod).reduce((s,r)=>s+r.qtd,0);
+      const qtdPendenteEntrega=reqPend.filter(r=>r.cod===c.cod&&(!r.instrRef||c.instr.includes(r.instrRef))).reduce((s,r)=>s+r.qtd,0);
       const pctPendente=c.qtdContratada>0?Math.min(Math.round(qtdPendenteEntrega/c.qtdContratada*100),pct):0;
       const pctEntregue=Math.max(pct-pctPendente,0);
       const pendenteBar=pctPendente>0?`<div class="exp-fill-pending" style="left:${pctEntregue}%;width:${pctPendente}%;color:${cor}"></div>`:'';
